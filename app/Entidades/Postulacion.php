@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Entidades\Sistema;
+namespace App\Entidades;
 
 use Illuminate\Database\Eloquent\Model;
 use DB;
 use Session;
 require app_path().'/start/constants.php';
 
-class Ciente extends Model
+class Postulacion extends Model
 {
     protected $table = 'postulaciones';
     public $timestamps = false;

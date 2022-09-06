@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Entidades\Sistema;
+namespace App\Entidades;
 
 use Illuminate\Database\Eloquent\Model;
 use DB;
 use Session;
 require app_path().'/start/constants.php';
 
-class Ciente extends Model
+class Sucursal extends Model
 {
     protected $table = 'sucursales';
     public $timestamps = false;
@@ -68,13 +68,12 @@ class Ciente extends Model
                     telefono, 
                     linkmapa
                     ) VALUES (?, ?, ?, ?);";
+                    
             $result = DB::insert($sql, [
             		$this->nombre,
-                    $this->apellido,
-                    $this->dni,
-                    $this->celular,
-                    $this->correo,
-                    $this->clave
+                    $this->direccion,
+                    $this->telefono,
+                    $this->linkmapa
                     ]);
 
             return $this->idsucural = DB::getPdo()->lastInsertId();
@@ -93,7 +92,7 @@ class Ciente extends Model
 
     public function obtenerTodos() {
         $sql = "SELECT 
-        A.idsucural,
+        A.idsucursal,
         A.nombre,
         A.direccion,
         A.telefono,

@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Entidades\Sistema;
+namespace App\Entidades;
 
 use Illuminate\Database\Eloquent\Model;
 use DB;
 use Session;
 require app_path().'/start/constants.php';
 
-class Ciente extends Model
+class Pedido extends Model
 {
     protected $table = 'pedidos';
     public $timestamps = false;
@@ -25,13 +25,15 @@ class Ciente extends Model
     
     function cargarDesdeRequest($request) {
         $this->idpedido = $request->input('id')!= "0" ? $request->input('id') : $this->idpedido;
-        $this->fecha =$request->input('txtFecha');
+        $this->fecha =$request->input('txtfecha');
+        
         $this->descripcion=$request->input('txtDescripcion');
-        $this->fk_idsucursal = $request->input('txtSucursal');
-        $this->fk_idcliente =  $request->input('txtCliente');
-        $this->fk_idestado = $request->input('txtEstado');
+        $this->fk_idsucursal = $request->input('lstSucursal');
+        $this->fk_idcliente =  $request->input('lstCliente');
+        $this->fk_idestado = $request->input('lstEstado');
         $this->fk_idestadopago = $request->input('txtEstadoPago');
         $this->total = $request->input('txtTotal');
+        
     }
 
     public function obtenerFiltrado() {
@@ -83,15 +85,17 @@ class Ciente extends Model
                     fk_idestado,
                     fk_idestadopago,
                     total
-                    ) VALUES (?, ?, ?, ?, ?, ?);";
+                    ) VALUES (?, ?, ?, ?, ?, ?, ?);";
             $result = DB::insert($sql, [
             		$this->fecha,
                     $this->descripcion,
                     $this->fk_idsucursal,
+                    $this->fk_idcliente,
                     $this->fk_idestado,
                     $this->fk_idestadopago,
                     $this->total
                     ]);
+           
 
             return $this->idpedido = DB::getPdo()->lastInsertId();
             

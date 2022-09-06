@@ -2,18 +2,18 @@
 @section('titulo', "$titulo")
 @section('scripts')
 <script>
-    globalId = '<?php echo isset($postulacion->idpostulacion) && $postulacion->idpostulacion > 0 ? $postulacion->idpostulacion : 0; ?>';
-    <?php $globalId = isset($postulacion->idpostulacion) ? $postulacion->idpostulacion : "0"; ?>
+    globalId = '<?php echo isset($categoria->idcategoria) && $categoria->idcategoria > 0 ? $categoria->idcategoria : 0; ?>';
+    <?php $globalId = isset($categoria->idcategoria) ? $categoria->idcategoria : "0"; ?>
 </script>
 @endsection
 @section('breadcrumb')
 <ol class="breadcrumb">
     <li class="breadcrumb-item"><a href="/admin">Inicio</a></li>
-    <li class="breadcrumb-item"><a href="/admin/postulaciones">Postulaciones</a></li>
+    <li class="breadcrumb-item"><a href="/admin/categorias">Categorias</a></li>
     <li class="breadcrumb-item active">Modificar</li>
 </ol>
 <ol class="toolbar">
-    <li class="btn-item"><a title="Nuevo" href="/admin/postulacion/nuevo" class="fa fa-plus-circle" aria-hidden="true"><span>Nuevo</span></a></li>
+    <li class="btn-item"><a title="Nuevo" href="/admin/categoria/nuevo" class="fa fa-plus-circle" aria-hidden="true"><span>Nuevo</span></a></li>
     <li class="btn-item"><a title="Guardar" href="#" class="fa fa-floppy-o" aria-hidden="true" onclick="javascript: $('#modalGuardar').modal('toggle');"><span>Guardar</span></a>
     </li>
     @if($globalId > 0)
@@ -26,6 +26,7 @@
         location.href = "/admin/";
     }
 </script>
+@endsection
 @section('contenido')
 <?php
 if (isset($msg)) {
@@ -48,38 +49,8 @@ if (isset($msg)) {
                 <label>Nombre: *</label>
                 <input type="text" id="txtNombre" name="txtNombre" class="form-control" value="" required>
             </div>
-            <div class="form-group col-lg-6">
-                <label>Apellido: *</label>
-                <input type="text" id="txtApellido" name="txtApellido" class="form-control" value="" required>
-            </div>
         </div>
-        <div class="row">
-            <div class="form-group col-lg-6">
-                <label>Documento: *</label>
-                <input type="text" id="txtDocumento" name="txtDocumento" class="form-control" value="" required>
-            </div>
-            <div class="form-group col-lg-6">
-                <label>Localidad: *</label>
-                <input type="text" id="txtLocalidad" name="txtLocalidad" class="form-control" value="" required>
-            </div>
-        </div>
-        <div class="row">
 
-            <div class="form-group col-lg-6">
-                <label>Correo: *</label>
-                <input type="text" id="txtCorreo" name="txtCorreo" class="form-control" value="" required>
-            </div>
-            <div class="form-group col-lg-6">
-                <label>Telefono: *</label>
-                <input type="text" id="txtTelefono" name="txtTelefono" class="form-control" value="" required>
-            </div>
-        </div>
-        <div class="row">
-            <div class="form-group col-lg-6">
-                <label>Adjuntar Curriculum: *</label>
-                <input type="text" id="txtLinkMapa" name="txtLinkMapa" class="form-control" value="" required>
-            </div>
-        </div>
 
     </form>
     <div class="modal fade" id="mdlEliminar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

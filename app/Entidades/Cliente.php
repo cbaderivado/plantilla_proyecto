@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Entidades\Sistema;
+namespace App\Entidades;
 
 use Illuminate\Database\Eloquent\Model;
 use DB;
 use Session;
 require app_path().'/start/constants.php';
 
-class Ciente extends Model
+class Cliente extends Model
 {
     protected $table = 'clientes';
     public $timestamps = false;
@@ -24,7 +24,7 @@ class Ciente extends Model
                             ];
     
     function cargarDesdeRequest($request) {
-        $this->idcliente = $request->input('id')!= "0" ? $request->input('id') : $this->idusuario;
+        $this->idcliente = $request->input('id')!= "0" ? $request->input('id') : $this->idcliente;
         $this->nombre =$request->input('txtNombre');
         $this->apellido = $request->input('txtApellido');
         $this->dni = $request->input('txtDni');
@@ -116,7 +116,7 @@ class Ciente extends Model
 
     public function obtenerTodos() {
         $sql = "SELECT 
-                A.idusuario,
+                A.idcliente,
                 A.nombre,
                 A.apellido,
                 A.dni,

@@ -7,32 +7,32 @@ use DB;
 use Session;
 require app_path().'/start/constants.php';
 
-class Estado extends Model
+class TipoProducto extends Model
 {
-    protected $table = 'estados';
+    protected $table = 'tipo_productos';
     public $timestamps = false;
 
     protected $fillable = [
-                            'idestado',
+                            'idtiproducto',
                             'nombre'
         
                             ];
     
     function cargarDesdeRequest($request) {
-        $this->idestado = $request->input('id')!= "0" ? $request->input('id') : $this->idestado;
+        $this->idtiproducto = $request->input('id')!= "0" ? $request->input('id') : $this->idtipoproducto;
         $this->nombre =$request->input('txtNombre');
     }
 
     public function obtenerFiltrado() {
         $request = $_REQUEST;
         $columns = array(
-            0 => 'A.idestado',
+            0 => 'A.idtiporpoducto',
             1 => 'A.nombre'
         );
         $sql = "SELECT 
-                A.idestado,
+                A.idtipoproducto,
                 A.nombre
-                FROM estados A
+                FROM tipo_productos A
                 WHERE 1=1";
         //Realiza el filtrado
         if (!empty($request['search']['value'])) { 
@@ -45,7 +45,7 @@ class Estado extends Model
         return $lstRetorno;
     }
      public function insertar() {
-            $sql = "INSERT INTO estados (
+            $sql = "INSERT INTO tipo_productos (
                     nombre
                     ) VALUES (?);";
             $result = DB::insert($sql, [
@@ -57,16 +57,16 @@ class Estado extends Model
     }
 
     public function guardar() {
-       $sql = "UPDATE estados SET
+       $sql = "UPDATE tipo_productos SET
             nombre='$this->nombre',
-            WHERE idestado= ?"; 
-        $affected = DB::update($sql, [$this->idestado]);
+            WHERE idtipoproducto= ?"; 
+        $affected = DB::update($sql, [$this->idtipoproducto]);
     }
     public function obtenerTodos() {
         $sql = "SELECT 
-                A.idestado,
+                A.idtipoproducto,
                 A.nombre
-                FROM estados A";
+                FROM tipo_productos A";
 
         $sql .= " ORDER BY A.nombre";
         $lstRetorno = DB::select($sql);
@@ -76,7 +76,7 @@ class Estado extends Model
     public function obtenerPorNombre($nombre) {
         $sql = "SELECT
                 A.nombre
-                FROM estados A
+                FROM tipo_productos A
                 WHERE A.nombre = '$nombre'";
         $lstRetorno = DB::select($sql);
 
@@ -86,11 +86,11 @@ class Estado extends Model
         }
         return null;
     }
-    public function obtenerPorIdEstado($idEstado){
+    public function obtenerPorIdTipoProducto($idTipoProducto){
         $sql = "SELECT
                 A.nombre
-                FROM estados A
-                WHERE A.idestado = '$idEstado'";
+                FROM tipo_productos A
+                WHERE A.idestado = '$idTipoProducto'";
             $lstRetorno = DB::select($sql);
            if(count($lstRetorno)>0){
             $this->nombre=$lstRetorno[0]->nombre;

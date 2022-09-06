@@ -1,13 +1,13 @@
 <?php
 
-namespace App\Entidades\Sistema;
+namespace App\Entidades;
 
 use Illuminate\Database\Eloquent\Model;
 use DB;
 use Session;
 require app_path().'/start/constants.php';
 
-class Ciente extends Model
+class Producto extends Model
 {
     protected $table = 'productos';
     public $timestamps = false;
@@ -28,7 +28,7 @@ class Ciente extends Model
         $this->precio=$request->input('txtPrecio');
         $this->descripcion = $request->input('txtDescripcion');
         $this->imagen =  $request->input('txtImagen');
-        $this->fk_idtipoproducto = $request->input('txtTipoProducto');
+        $this->fk_idtipoproducto = $request->input('lstTipoProducto');
         $this->cantidad = $request->input('txtCantidad');
         
     }
@@ -71,7 +71,7 @@ class Ciente extends Model
      public function insertar() {
         $now = new \DateTime();
 
-            $sql = "INSERT INTO producto (
+            $sql = "INSERT INTO productos (
                         nombre,
                         precio,
                         descripcion,
