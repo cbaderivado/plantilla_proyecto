@@ -53,4 +53,49 @@ class ControladorCategoria extends Controller
         }
         return view('categoria.categoria-nuevo', compact('titulo'));
     }
+    public function index()
+    {
+        $titulo = "Categoria";
+        if (Usuario::autenticado() == true) {
+            if (!Patente::autorizarOperacion("MENUCONSULTA")) {
+                $codigo = "MENUCONSULTA";
+                $mensaje = "No tiene permisos para la operaci&oacute;n.";
+                return view('sistema.pagina-error', compact('titulo', 'codigo', 'mensaje'));
+            } else {
+                return view('categoria.categoria-listar', compact('titulo'));
+            }
+        } else {
+            return redirect('admin/login');
+        }
+    }
+    public function cargarGrilla()
+    {
+        $request = $_REQUEST;
+
+        $entidad = new Categoria();
+        $aCategorias = $entidad->obtenerFiltrado();
+
+        $data = array();
+        $cont = 0;
+
+        $inicio = $request['start'];
+        $registros_por_pagina = $request['length'];
+
+
+        for ($i = $inicio; $i < count($aCategorias) && $cont < $registros_por_pagina; $i++) {
+            $row = array();
+            $row[] = '<a href="/admin/categoria/nuevo/' . $aCategorias[$i]->idcategoria . '">' . $aCategorias[$i]->nombre. '</a>';
+            
+            $cont++;
+            $data[] = $row;
+        }
+
+        $json_data = array(
+            "draw" => intval($request['draw']),
+            "recordsTotal" => count($aCategorias), //cantidad total de registros sin paginar
+            "recordsFiltered" => count($aCategorias), //cantidad total de registros en la paginacion
+            "data" => $data,
+        );
+        return json_encode($json_data);
+    }
 }

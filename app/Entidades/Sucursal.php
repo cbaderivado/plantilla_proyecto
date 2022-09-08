@@ -32,14 +32,14 @@ class Sucursal extends Model
     public function obtenerFiltrado() {
         $request = $_REQUEST;
         $columns = array(
-            0 => 'A.idsucural',
+            0 => 'A.idsucursal',
             1 => 'A.nombre',
             2 => 'A.direccion',
             3 => 'A.telefono',
             4 => 'A.linkmapa'
         );
         $sql = "SELECT 
-                A.idsucural,
+                A.idsucursal,
                 A.nombre,
                 A.direccion,
                 A.telefono,

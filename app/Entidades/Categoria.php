@@ -30,13 +30,13 @@ class Categoria extends Model
             1 => 'A.nombre'
         );
         $sql = "SELECT 
-                A.idusuario,
+                A.idcategoria,
                 A.nombre
                 FROM categorias A
                 WHERE 1=1";
         //Realiza el filtrado
         if (!empty($request['search']['value'])) { 
-            $sql.=" AND ( A.nombre LIKE '%" . $request['search']['value'] . "%' ";
+            $sql.=" AND ( A.nombre LIKE '%" . $request['search']['value'] . "%') ";
         }
         $sql.=" ORDER BY " . $columns[$request['order'][0]['column']] . "   " . $request['order'][0]['dir'];
 

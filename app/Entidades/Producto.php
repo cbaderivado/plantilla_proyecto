@@ -38,27 +38,29 @@ class Producto extends Model
         $columns = array(
             0 => 'A.idproducto',
             1 => 'A.nombre',
-            2 => 'A.precio',
-            3 => 'A.descripcion',
-            4 => 'A.imagen',
-            5 => 'A.fk_idtipoproducto',
-            5 => 'A.cantidad'
+            2 => 'A.descripcion',
+            3 => 'tipoProducto',
+            4 => 'A.precio',
+            5 => 'A.cantidad',
+            6 => 'A.imagen'
         );
         $sql = "SELECT 
                 A.idproducto,
                 A.nombre,
-                A.precio,
                 A.descripcion,
-                A.imagen,
-                A.fk_idtipoproducto,
-                A.cantidad
-                FROM productos A
+                B.nombre as tipoProducto,
+                A.precio,
+                A.cantidad,
+                A.imagen
+                FROM productos A LEFT JOIN tipo_productos B
+                ON A.fk_idtipoproducto=B.idtipoproducto
                 WHERE 1=1";
 
         //Realiza el filtrado
         if (!empty($request['search']['value'])) { 
-            $sql.=" AND ( A.nombre LIKE '%" . $request['search']['value'] . "%' ";
-            $sql.=" OR A.fk_idtipoproducto LIKE '%" . $request['search']['value'] . "%' ";
+            $sql.=" AND ( A.nombre LIKE '%" . $request['search']['value'] . "%') ";
+            $sql.=" OR ( A.descripcion LIKE '%" . $request['search']['value'] . "%') ";
+            $sql.=" OR ( B.nombre LIKE '%" . $request['search']['value'] . "%') ";
         }
         $sql.=" ORDER BY " . $columns[$request['order'][0]['column']] . "   " . $request['order'][0]['dir'];
 

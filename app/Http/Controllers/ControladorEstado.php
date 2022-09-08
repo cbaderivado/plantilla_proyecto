@@ -56,4 +56,49 @@ class ControladorEstado extends Controller
 
         return view('estado.estado-nuevo', compact('titulo'));
     }
+    public function index()
+    {
+        $titulo = "Estado";
+        if (Usuario::autenticado() == true) {
+            if (!Patente::autorizarOperacion("MENUCONSULTA")) {
+                $codigo = "MENUCONSULTA";
+                $mensaje = "No tiene permisos para la operaci&oacute;n.";
+                return view('sistema.pagina-error', compact('titulo', 'codigo', 'mensaje'));
+            } else {
+                return view('estado.estado-listar', compact('titulo'));
+            }
+        } else {
+            return redirect('admin/login');
+        }
+    }
+    public function cargarGrilla()
+    {
+        $request = $_REQUEST;
+
+        $entidad = new Estado();
+        $aEstados = $entidad->obtenerFiltrado();
+
+        $data = array();
+        $cont = 0;
+
+        $inicio = $request['start'];
+        $registros_por_pagina = $request['length'];
+
+
+        for ($i = $inicio; $i < count($aEstados) && $cont < $registros_por_pagina; $i++) {
+            $row = array();
+            $row[] = '<a href="/admin/estado/nuevo/' . $aEstados[$i]->idestado . '">' . $aEstados[$i]->nombre. '</a>';
+            
+            $cont++;
+            $data[] = $row;
+        }
+
+        $json_data = array(
+            "draw" => intval($request['draw']),
+            "recordsTotal" => count($aEstados), //cantidad total de registros sin paginar
+            "recordsFiltered" => count($aEstados), //cantidad total de registros en la paginacion
+            "data" => $data,
+        );
+        return json_encode($json_data);
+    }
 }

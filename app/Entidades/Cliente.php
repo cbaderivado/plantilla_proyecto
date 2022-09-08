@@ -36,7 +36,7 @@ class Cliente extends Model
     public function obtenerFiltrado() {
         $request = $_REQUEST;
         $columns = array(
-            0 => 'A.idusuario',
+            0 => 'A.idcliente',
             1 => 'A.nombre',
             2 => 'A.apellido',
             3 => 'A.dni',
@@ -45,7 +45,7 @@ class Cliente extends Model
             6 => 'A.clave'
         );
         $sql = "SELECT 
-                A.idusuario,
+                A.idcliente,
                 A.nombre,
                 A.apellido,
                 A.dni,
@@ -57,9 +57,11 @@ class Cliente extends Model
 
         //Realiza el filtrado
         if (!empty($request['search']['value'])) { 
-            $sql.=" AND ( A.nombre LIKE '%" . $request['search']['value'] . "%' ";
-            $sql.=" OR A.apellido LIKE '%" . $request['search']['value'] . "%' ";
-            $sql.=" OR A.dni LIKE '%" . $request['search']['value'] . "%' )";
+            $sql.=" AND ( A.nombre LIKE '%" . $request['search']['value'] . "%') ";
+            $sql.=" OR (A.apellido LIKE '%" . $request['search']['value'] . "%') ";
+            $sql.=" OR (A.dni LIKE '%" . $request['search']['value'] . "%' )";
+            $sql.=" OR (A.celular LIKE '%" . $request['search']['value'] . "%' )";
+            $sql.=" OR (A.correo LIKE '%" . $request['search']['value'] . "%' )";
         }
         $sql.=" ORDER BY " . $columns[$request['order'][0]['column']] . "   " . $request['order'][0]['dir'];
 
