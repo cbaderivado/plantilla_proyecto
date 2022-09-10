@@ -67,8 +67,8 @@ class ControladorPedido extends Controller
         $estado= new Estado();
         $aEstados=$estado->obtenerTodos();
         $cliente= new Cliente();
-        $aClientes=$cliente->obtenerTodos();
-        return view('pedido.pedido-nuevo', compact('titulo','aSucursales','aClientes','aEstados'));
+        $aPedidos=$cliente->obtenerTodos();
+        return view('pedido.pedido-nuevo', compact('titulo','aSucursales','aPedidos','aEstados'));
     }
     public function index()
     {
@@ -85,6 +85,40 @@ class ControladorPedido extends Controller
             return redirect('admin/login');
         }
     }
+    public function cargarGrilla()
+    {
+        $request = $_REQUEST;
 
+        $entidad = new Pedido();
+        $aPedidos = $entidad->obtenerFiltrado();
+
+        $data = array();
+        $cont = 0;
+
+        $inicio = $request['start'];
+        $registros_por_pagina = $request['length'];
+
+
+        for ($i = $inicio; $i < count($aPedidos) && $cont < $registros_por_pagina; $i++) {
+            $row = array();
+            $row[] = '<a href="/admin/pedido/nuevo/' . $aPedidos[$i]->idpedido . '">' . $aPedidos[$i]->fecha . '</a>';
+            $row[] = $aPedidos[$i]->descripcion;
+            $row[] = $aPedidos[$i]->sucursal;
+            $row[] = $aPedidos[$i]->cliente;
+            $row[] = $aPedidos[$i]->estado;
+            $row[] = $aPedidos[$i]->estadoPago;
+            $row[] = $aPedidos[$i]->total;
+            $cont++;
+            $data[] = $row;
+        }
+
+        $json_data = array(
+            "draw" => intval($request['draw']),
+            "recordsTotal" => count($aPedidos), //cantidad total de registros sin paginar
+            "recordsFiltered" => count($aPedidos), //cantidad total de registros en la paginacion
+            "data" => $data,
+        );
+        return json_encode($json_data);
+    }
 }
 

@@ -60,9 +60,12 @@ class Postulacion extends Model
 
         //Realiza el filtrado
         if (!empty($request['search']['value'])) { 
-            $sql.=" AND ( A.nombre LIKE '%" . $request['search']['value'] . "%' ";
-            $sql.=" OR A.apellido LIKE '%" . $request['search']['value'] . "%' ";
-            $sql.=" OR A.documento LIKE '%" . $request['search']['value'] . "%' )";
+            $sql.=" AND ( A.nombre LIKE '%" . $request['search']['value'] . "%') ";
+            $sql.=" OR ( A.apellido LIKE '%" . $request['search']['value'] . "%' ) ";
+            $sql.=" OR ( A.documento LIKE '%" . $request['search']['value'] . "%' )";
+            $sql.=" OR ( A.correo LIKE '%" . $request['search']['value'] . "%' )";
+            $sql.=" OR ( A.telefono LIKE '%" . $request['search']['value'] . "%' )";
+            
         }
         $sql.=" ORDER BY " . $columns[$request['order'][0]['column']] . "   " . $request['order'][0]['dir'];
 

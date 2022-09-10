@@ -26,6 +26,7 @@
         location.href = "/admin/";
     }
 </script>
+@endsection
 @section('contenido')
 <?php
 if (isset($msg)) {

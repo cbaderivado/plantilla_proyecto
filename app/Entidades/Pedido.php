@@ -42,29 +42,38 @@ class Pedido extends Model
             0 => 'A.idpedido',
             1 => 'A.fecha',
             2 => 'A.descripcion',
-            3 => 'A.fk_idsucursal',
-            4 => 'A.fk_idcliente',
-            5 => 'A.fk_idestado',
-            5 => 'A.fk_idestadopago',
+            3 => 'A.sucursal',
+            4 => 'A.cliente',
+            5 => 'A.estado',
+            5 => 'A.estadopago',
             6 => 'A.total'
         );
         $sql = "SELECT 
                 A.idpedido,
-                A.fecha,
+				DATE_FORMAT(A.fecha, '%d/%m/%Y') AS fecha,
                 A.descripcion,
-                A.fk_idsucursal,
-                A.fk_idcliente,
-                A.fk_idestado,
-                A.fk_idestadopago,
+                B.nombre AS sucursal,
+                CONCAT(C.nombre,' ',C.apellido) AS cliente,
+                D.nombre AS estado,
+                E.nombre AS estadoPago,
                 A.total
                 FROM pedidos A
+                LEFT JOIN sucursales B ON A.fk_idsucursal=B.idsucursal
+                LEFT JOIN clientes C ON A.fk_idcliente=C.idcliente
+                LEFT JOIN estados D ON A.fk_idestado=D.idestado
+                LEFT JOIN estado_pagos E ON A.fk_idestadopago=E.idestadopago
                 WHERE 1=1";
 
         //Realiza el filtrado
         if (!empty($request['search']['value'])) { 
-            $sql.=" AND ( A.fecha LIKE '%" . $request['search']['value'] . "%' ";
-            $sql.=" OR A.descripcion LIKE '%" . $request['search']['value'] . "%' ";
-            $sql.=" OR A.total LIKE '%" . $request['search']['value'] . "%' )";
+            $sql.=" AND ( DATE_FORMAT(A.fecha, '%d/%m/%Y') LIKE '%" . $request['search']['value'] . "%' )";
+            $sql.=" OR (A.descripcion LIKE '%" . $request['search']['value'] . "%') ";
+            $sql.=" OR (B.nombre LIKE '%" . $request['search']['value'] . "%') ";
+            $sql.=" OR (C.nombre LIKE '%" . $request['search']['value'] . "%') ";
+            $sql.=" OR (C.apellido LIKE '%" . $request['search']['value'] . "%') ";
+            $sql.=" OR (D.nombre LIKE '%" . $request['search']['value'] . "%') ";
+            $sql.=" OR (E.nombre LIKE '%" . $request['search']['value'] . "%') ";
+            $sql.=" OR (A.total LIKE '%" . $request['search']['value'] . "%' )";
         }
         $sql.=" ORDER BY " . $columns[$request['order'][0]['column']] . "   " . $request['order'][0]['dir'];
 

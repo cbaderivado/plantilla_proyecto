@@ -12,7 +12,7 @@
     <li class="breadcrumb-item active">Pedidos</a></li>
 </ol>
 <ol class="toolbar">
-    <li class="btn-item"><a title="Nuevo" href="/admin/estado/nuevo" class="fa fa-plus-circle" aria-hidden="true"><span>Nuevo</span></a></li>
+    <li class="btn-item"><a title="Nuevo" href="/admin/pedido/nuevo" class="fa fa-plus-circle" aria-hidden="true"><span>Nuevo</span></a></li>
     <li class="btn-item"><a title="Recargar" href="#" class="fa fa-refresh" aria-hidden="true" onclick='window.location.replace("/admin/pedidos");'><span>Recargar</span></a></li>
 </ol>
 @endsection
@@ -26,19 +26,28 @@ if (isset($msg)) {
 <table id="grilla" class="display">
     <thead>
         <tr>
+            <th>Fecha</th>
+            <th>Descripcion</th>
             <th>Sucursal</th>
             <th>Cliente</th>
             <th>Estado</th>
             <th>Estado pago</th>
-            <th>Sucursal</th>
             <th>Total</th>
             
         </tr>
     </thead>
 </table> 
 <script>
-	var dataTable = $('#grilla').DataTable(
+	var dataTable = $('#grilla').DataTable({
+        "processing": true,
+        "serverSide": true,
+	    "bFilter": true,
+	    "bInfo": true,
+	    "bSearchable": true,
+        "pageLength": 25,
+        "order": [[ 0, "asc" ]],
+	    "ajax": "{{ route('pedido.cargarGrilla') }}"
     
-    );
+     } );
 </script>
 @endsection
