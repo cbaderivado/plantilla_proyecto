@@ -7,7 +7,7 @@ use App\Entidades\TipoProducto;
 use App\Entidades\Sistema\Patente;
 use App\Entidades\Sistema\Usuario;
 use Illuminate\Http\Request;
-
+use Illuminate\Database\QueryException;
 require app_path() . '/start/constants.php';
 
 class ControladorProducto extends Controller
@@ -16,9 +16,10 @@ class ControladorProducto extends Controller
     {
         $titulo = "Nuevo producto";
         $tipoproducto = new TipoProducto();
-        $array_tipoproducto=$tipoproducto->obtenerTodos();
+        $aTipoProductos=$tipoproducto->obtenerTodos();
+        $producto=new Producto();
         
-        return view('producto.producto-nuevo', compact('titulo','array_tipoproducto'));
+        return view('producto.producto-nuevo', compact('titulo','aTipoProductos','producto'));
            
     }
     public function guardar(Request $request)
@@ -28,7 +29,7 @@ class ControladorProducto extends Controller
             $titulo = "Modificar producto";
             $entidad = new Producto();
             $entidad->cargarDesdeRequest($request);
-
+            $_POST["id"] = $entidad->idproducto;
             //validaciones
             if ($entidad->nombre == "") {
                 $msg["ESTADO"] = MSG_ERROR;
@@ -48,7 +49,7 @@ class ControladorProducto extends Controller
                     $msg["MSG"] = OKINSERT;
                 }
 
-                $_POST["id"] = $entidad->idcliente;
+             
                 return view('producto.producto-listar', compact('titulo', 'msg'));
             }
         } catch (Exception $e) {
@@ -105,6 +106,52 @@ class ControladorProducto extends Controller
             "data" => $data,
         );
         return json_encode($json_data);
+    }
+    public function editar($id)
+    {
+        $titulo = "Modificar producto";
+        if (Usuario::autenticado() == true) {
+            if (!Patente::autorizarOperacion("MENUMODIFICACION")) {
+                $codigo = "MENUMODIFICACION";
+                $mensaje = "No tiene pemisos para la operaci&oacute;n.";
+                return view('sistema.pagina-error', compact('titulo', 'codigo', 'mensaje'));
+            } else {
+                $producto = new producto();
+                $aProductos=$producto->obtenerPorId($id);
+                
+                $tipoproducto = new TipoProducto();
+                $aTipoProductos=$tipoproducto->obtenerTodos();
+
+                return view('producto.producto-nuevo', compact('producto', 'titulo','aProductos','aTipoProductos'));
+            }
+        } else {
+            return redirect('admin/login');
+        }
+    }
+    public function eliminar(Request $request)
+    {
+        $id = $request->input('id');
+
+        if (Usuario::autenticado() == true) {
+            if (Patente::autorizarOperacion("MENUELIMINAR")) {
+
+                $entidad = new Producto();
+                $entidad->cargarDesdeRequest($request);
+                try {
+                    $entidad->eliminar();
+                    $aResultado["err"] = EXIT_SUCCESS; //eliminado correctamente
+                } catch (QueryException $e) {
+
+                    $aResultado["err"] = $e->getMessage();
+                }
+            } else {
+                $codigo = "ELIMINARPROFESIONAL";
+                $aResultado["err"] = "No tiene pemisos para la operaci&oacute;n.";
+            }
+            echo json_encode($aResultado);
+        } else {
+            return redirect('admin/login');
+        }
     }
 
 }

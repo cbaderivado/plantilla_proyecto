@@ -47,38 +47,38 @@ if (isset($msg)) {
             <input type="hidden" id="id" name="id" class="form-control" value="{{$globalId}}" required>
             <div class="form-group col-lg-6">
                 <label>Nombre: *</label>
-                <input type="text" id="txtNombre" name="txtNombre" class="form-control" value="" required>
+                <input type="text" id="txtNombre" name="txtNombre" class="form-control" value="{{$postulacion->nombre}}" required>
             </div>
             <div class="form-group col-lg-6">
                 <label>Apellido: *</label>
-                <input type="text" id="txtApellido" name="txtApellido" class="form-control" value="" required>
+                <input type="text" id="txtApellido" name="txtApellido" class="form-control" value="{{$postulacion->apellido}}" required>
             </div>
         </div>
         <div class="row">
             <div class="form-group col-lg-6">
                 <label>Documento: *</label>
-                <input type="text" id="txtDocumento" name="txtDocumento" class="form-control" value="" required>
+                <input type="text" id="txtDocumento" name="txtDocumento" class="form-control" value="{{$postulacion->documento}}" required>
             </div>
             <div class="form-group col-lg-6">
                 <label>Localidad: *</label>
-                <input type="text" id="txtLocalidad" name="txtLocalidad" class="form-control" value="" required>
+                <input type="text" id="txtLocalidad" name="txtLocalidad" class="form-control" value="{{$postulacion->localidad}}" required>
             </div>
         </div>
         <div class="row">
-
-            <div class="form-group col-lg-6">
-                <label>Correo: *</label>
-                <input type="text" id="txtCorreo" name="txtCorreo" class="form-control" value="" required>
-            </div>
             <div class="form-group col-lg-6">
                 <label>Telefono: *</label>
-                <input type="text" id="txtTelefono" name="txtTelefono" class="form-control" value="" required>
+                <input type="text" id="txtTelefono" name="txtTelefono" class="form-control" value="{{$postulacion->telefono}}" required>
             </div>
+            <div class="form-group col-lg-6">
+                <label>Correo: *</label>
+                <input type="text" id="txtCorreo" name="txtCorreo" class="form-control" value="{{$postulacion->correo}}" required>
+            </div>
+
         </div>
         <div class="row">
             <div class="form-group col-lg-6">
                 <label>Adjuntar Curriculum: *</label>
-                <input type="text" id="txtLinkMapa" name="txtLinkMapa" class="form-control" value="" required>
+                <input type="text" id="txtLinkMapa" name="txtLinkMapa" class="form-control" value="{{$postulacion->archivo_cv}}" required>
             </div>
         </div>
 
@@ -115,25 +115,37 @@ if (isset($msg)) {
         }
 
         function eliminar() {
-            $.ajax({
-                type: "GET",
-                url: "{{ asset('admin/cliente/eliminar') }}",
-                data: {
-                    id: globalId
-                },
-                async: true,
-                dataType: "json",
-                success: function(data) {
-                    if (data.err = "0") {
-                        msgShow("Registro eliminado exitosamente.", "success");
-                        $("#btnEnviar").hide();
-                        $("#btnEliminar").hide();
-                        $('#mdlEliminar').modal('toggle');
-                    } else {
-                        msgShow("Error al eliminar", "success");
-                    }
-                }
-            });
-        }
+                  $.ajax({
+                        type: "GET",
+                        url: "{{ asset('admin/postulacion/eliminar') }}",
+                        data: {
+                              id: globalId
+                        },
+                        async: true,
+                        dataType: "json",
+                        success: function(data) {
+                              mensaje = "";
+                              tipo = "";
+
+                              if (data.err == "0") {
+                                    mensaje = "Registro eliminado exitosamente.";
+                                    tipo = "success";
+                                    quitarcartel(mensaje, tipo);
+                                    location.href = '/admin/postulaciones';
+                              } else {
+                                    mensaje = data.err;
+                                    tipo = "danger";
+                                    quitarcartel(mensaje, tipo);
+                              }
+                        }
+                  });
+            }
+
+            function quitarcartel(mensaje, tipo) {
+                  msgShow(mensaje, tipo);
+                  $("#btnEnviar").hide();
+                  $("#btnEliminar").hide();
+                  $('#mdlEliminar').modal('toggle');
+            }
     </script>
     @endsection

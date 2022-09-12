@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Entidades\Sucursal; //include_once "app/Entidades/Sistema/Menu.php";
 use App\Entidades\Sistema\Patente;
 use App\Entidades\Sistema\Usuario;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 
 require app_path() . '/start/constants.php';
@@ -14,8 +15,8 @@ class ControladorSucursal extends Controller
     public function nuevo()
     {
         $titulo = "Nueva sucursal";
-        
-        return view('sucursal.sucursal-nuevo', compact('titulo'));
+        $sucursal=new Sucursal();
+        return view('sucursal.sucursal-nuevo', compact('titulo','sucursal'));
            
     }
     public function guardar(Request $request)
@@ -85,7 +86,7 @@ class ControladorSucursal extends Controller
 
         for ($i = $inicio; $i < count($aSucursales) && $cont < $registros_por_pagina; $i++) {
             $row = array();
-            $row[] = '<a href="/admin/surcursal/nuevo/' . $aSucursales[$i]->idsucursal . '">' . $aSucursales[$i]->nombre . '</a>';
+            $row[] = '<a href="/admin/sucursal/nuevo/' . $aSucursales[$i]->idsucursal . '">' . $aSucursales[$i]->nombre . '</a>';
             $row[] = $aSucursales[$i]->direccion;
             $row[] = $aSucursales[$i]->telefono;
             $cont++;
@@ -99,5 +100,48 @@ class ControladorSucursal extends Controller
             "data" => $data,
         );
         return json_encode($json_data);
+    }
+    public function editar($id)
+    {
+        $titulo = "Modificar sucursal";
+        if (Usuario::autenticado() == true) {
+            if (!Patente::autorizarOperacion("MENUMODIFICACION")) {
+                $codigo = "MENUMODIFICACION";
+                $mensaje = "No tiene pemisos para la operaci&oacute;n.";
+                return view('sistema.pagina-error', compact('titulo', 'codigo', 'mensaje'));
+            } else {
+                $sucursal = new sucursal();
+                $sucursal=$sucursal->obtenerPorId($id);
+               
+                return view('sucursal.sucursal-nuevo', compact( 'titulo','sucursal'));
+            }
+        } else {
+            return redirect('admin/login');
+        }
+    }
+    public function eliminar(Request $request)
+    {
+        $id = $request->input('id');
+
+        if (Usuario::autenticado() == true) {
+            if (Patente::autorizarOperacion("MENUELIMINAR")) {
+
+                $entidad = new Sucursal();
+                $entidad->cargarDesdeRequest($request);
+                try {
+                    $entidad->eliminar();
+                    $aResultado["err"] = EXIT_SUCCESS; //eliminado correctamente
+                } catch (QueryException $e) {
+
+                    $aResultado["err"] = $e->getMessage();
+                }
+            } else {
+                $codigo = "ELIMINARPROFESIONAL";
+                $aResultado["err"] = "No tiene pemisos para la operaci&oacute;n.";
+            }
+            echo json_encode($aResultado);
+        } else {
+            return redirect('admin/login');
+        }
     }
 }

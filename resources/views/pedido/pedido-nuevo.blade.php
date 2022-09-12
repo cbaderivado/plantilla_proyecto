@@ -2,8 +2,9 @@
 @section('titulo', "$titulo")
 @section('scripts')
 <script>
-    globalId = '<?php echo isset($pedido->idpedido) && $pedido->idpedido > 0 ? $pedido->idpedido : 0; ?>';
-    <?php $globalId = isset($pedido->idpedido) ? $pedido->idpedido : "0"; ?>
+    globalId = '<?php echo isset($aPedidos->idpedido) && $aPedidos->idpedido > 0 ? $aPedidos->idpedido : 0; ?>';
+    <?php $globalId = isset($aPedidos->idpedido) ? $aPedidos->idpedido : "0";
+    ?>
 </script>
 @endsection
 @section('breadcrumb')
@@ -29,6 +30,8 @@
 @endsection
 @section('contenido')
 <?php
+
+
 if (isset($msg)) {
     echo '<div id = "msg"></div>';
     echo '<script>msgShow("' . $msg["MSG"] . '", "' . $msg["ESTADO"] . '")</script>';
@@ -41,6 +44,7 @@ if (isset($msg)) {
         echo '<script>msgShow("' . $msg["MSG"] . '", "' . $msg["ESTADO"] . '")</script>';
     }
     ?>
+
     <form id="form1" method="POST">
         <div class="row">
             <input type="hidden" name="_token" value="{{ csrf_token() }}"></input>
@@ -48,20 +52,26 @@ if (isset($msg)) {
             <input type="hidden" id="id" name="id" class="form-control" value="{{$globalId}}" required>
             <div class="form-group col-lg-6">
                 <label>Fecha: *</label>
-                <input type="date" id="txtFecha" name="txtfecha" class="form-control" value="" required>
+                
+                <input type="date" id="txtFecha" name="txtfecha" class="form-control" value="{{strtotime($aPedidos->fecha)}}" required>
+                
             </div>
 
             <div class="form-group col-lg-6">
                 <label>Descripcion: *</label>
-                <input type="text" id="txtDescripcion" name="txtDescripcion" class="form-control" value="" required>
+                <input type="text" id="txtDescripcion" name="txtDescripcion" class="form-control" value="{{$aPedidos->descripcion}}" required>
             </div>
         </div>
         <div class="row">
             <div class="form-group col-lg-6">
                 <label>Sucursal:</label>
                 <select id="lstSucursal" name="lstSucursal" class="form-control">
-                    <option selected disabled>Seleccionar</option>
 
+                    @if($globalId>0)
+                    <option selected value="{{ $aPedidos->fk_idsucursal }}">{{ $aPedidos->sucursal }}</option>
+                    @else
+                    <option selected disabled>Seleccionar</option>
+                    @endif
                     @foreach ($aSucursales as $item)
                     <option value="{{ $item->idsucursal }}">{{ $item->nombre }}</option>
                     @endforeach
@@ -71,11 +81,16 @@ if (isset($msg)) {
             <div class="form-group col-lg-6">
                 <label>Cliente:</label>
                 <select id="lstCliente" name="lstCliente" class="form-control">
+                    @if ($globalId>0)
+                    <option selected value="{{ $aPedidos->fk_idcliente }}">{{ $aPedidos->cliente }}</option>
+                    @else
                     <option selected disabled>Seleccionar</option>
 
+                    @endif
                     @foreach ($aClientes as $item)
                     <option value="{{ $item->idcliente }}">{{ $item->nombre }}</option>
                     @endforeach
+
 
                 </select>
             </div>
@@ -84,17 +99,23 @@ if (isset($msg)) {
             <div class="form-group col-lg-6">
                 <label>Estado:</label>
                 <select id="lstEstado" name="lstEstado" class="form-control">
+                    @if ($globalId>0)
+                    <option selectedvalue="{{ $aPedidos->fk_idestado }}">{{ $aPedidos->estado }}</option>
+                    @else
                     <option selected disabled>Seleccionar</option>
+
+                    @endif
                     @foreach ($aEstados as $item)
                     <option value="{{ $item->idestado }}">{{ $item->nombre }}</option>
                     @endforeach
+
 
                 </select>
             </div>
 
             <div class="form-group col-lg-6">
                 <label>Total: *</label>
-                <input type="text" id="txtTotal" name="txtTotal" class="form-control" value="" required>
+                <input type="text" id="txtTotal" name="txtTotal" class="form-control" value="{{ $aPedidos->total }}" required>
             </div>
         </div>
         <div class="modal fade" id="mdlEliminar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -131,23 +152,35 @@ if (isset($msg)) {
             function eliminar() {
                 $.ajax({
                     type: "GET",
-                    url: "{{ asset('admin/cliente/eliminar') }}",
+                    url: "{{ asset('admin/pedido/eliminar') }}",
                     data: {
                         id: globalId
                     },
                     async: true,
                     dataType: "json",
                     success: function(data) {
-                        if (data.err = "0") {
-                            msgShow("Registro eliminado exitosamente.", "success");
-                            $("#btnEnviar").hide();
-                            $("#btnEliminar").hide();
-                            $('#mdlEliminar').modal('toggle');
+                        mensaje = "";
+                        tipo = "";
+
+                        if (data.err == "0") {
+                            mensaje = "Registro eliminado exitosamente.";
+                            tipo = "success";
+                            quitarcartel(mensaje, tipo);
+                            location.href = '/admin/pedidos';
                         } else {
-                            msgShow("Error al eliminar", "success");
+                            mensaje = data.err;
+                            tipo = "danger";
+                            quitarcartel(mensaje, tipo);
                         }
                     }
                 });
+            }
+
+            function quitarcartel(mensaje, tipo) {
+                msgShow(mensaje, tipo);
+                $("#btnEnviar").hide();
+                $("#btnEliminar").hide();
+                $('#mdlEliminar').modal('toggle');
             }
         </script>
 

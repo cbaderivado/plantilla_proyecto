@@ -47,12 +47,12 @@ if (isset($msg)) {
                   <input type="hidden" id="id" name="id" class="form-control" value="{{$globalId}}" required>
                   <div class="form-group col-lg-6">
                         <label>Nombre: *</label>
-                        <input type="text" id="txtNombre" name="txtNombre" class="form-control" value="" required>
+                        <input type="text" id="txtNombre" name="txtNombre" class="form-control" value="{{$sucursal->nombre}}" required>
                   </div>
 
                   <div class="form-group col-lg-6">
                         <label>Direccion: *</label>
-                        <input type="text" id="txtDireccion" name="txtDireccion" class="form-control" value="" required>
+                        <input type="text" id="txtDireccion" name="txtDireccion" class="form-control" value="{{$sucursal->direccion}}" required>
                   </div>
             </div>
             <div class="row">
@@ -60,11 +60,11 @@ if (isset($msg)) {
                   <input type="hidden" id="id" name="id" class="form-control" value="{{$globalId}}" required>
                   <div class="form-group col-lg-6">
                         <label>Telefono: *</label>
-                        <input type="text" id="txtTelefono" name="txtTelefono" class="form-control" value="" required>
+                        <input type="text" id="txtTelefono" name="txtTelefono" class="form-control" value="{{$sucursal->telefono}}" required>
                   </div>
                   <div class="form-group col-lg-6">
                         <label>Ubicación: *</label>
-                        <input type="text" id="txtLinkMapa" name="txtLinkMapa" class="form-control" value="" required>
+                        <input type="text" id="txtLinkMapa" name="txtLinkMapa" class="form-control" value="{{$sucursal->linkmapa}}" required>
                   </div>
             </div>
 
@@ -104,23 +104,36 @@ if (isset($msg)) {
             function eliminar() {
                   $.ajax({
                         type: "GET",
-                        url: "{{ asset('admin/cliente/eliminar') }}",
+                        url: "{{ asset('admin/sucursal/eliminar') }}",
                         data: {
                               id: globalId
                         },
                         async: true,
                         dataType: "json",
                         success: function(data) {
-                              if (data.err = "0") {
-                                    msgShow("Registro eliminado exitosamente.", "success");
-                                    $("#btnEnviar").hide();
-                                    $("#btnEliminar").hide();
-                                    $('#mdlEliminar').modal('toggle');
+                              mensaje = "";
+                              tipo = "";
+
+                              if (data.err == "0") {
+                                    mensaje = "Registro eliminado exitosamente.";
+                                    tipo = "success";
+                                    quitarcartel(mensaje, tipo);
+                                    location.href = '/admin/sucursales';
                               } else {
-                                    msgShow("Error al eliminar", "success");
+                                    mensaje = data.err;
+                                    tipo = "danger";
+                                    quitarcartel(mensaje, tipo);
                               }
                         }
                   });
             }
+
+            function quitarcartel(mensaje, tipo) {
+                  msgShow(mensaje, tipo);
+                  $("#btnEnviar").hide();
+                  $("#btnEliminar").hide();
+                  $('#mdlEliminar').modal('toggle');
+            }
+            
       </script>
       @endsection

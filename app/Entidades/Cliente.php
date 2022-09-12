@@ -4,6 +4,8 @@ namespace App\Entidades;
 
 use Illuminate\Database\Eloquent\Model;
 use DB;
+use Illuminate\Database\QueryException;
+use PhpParser\Node\Stmt\Catch_;
 use Session;
 require app_path().'/start/constants.php';
 
@@ -157,7 +159,7 @@ class Cliente extends Model
     }
 
   
-    public function obtenerPorIdcliente($idCliente){
+    public function obtenerPorId($idCliente){
         $sql = "SELECT
                 A.nombre,
                 A.apellido,
@@ -169,15 +171,24 @@ class Cliente extends Model
                 WHERE A.idcliente = '$idCliente'";
             $lstRetorno = DB::select($sql);
            if(count($lstRetorno)>0){
+            $this->idcliente=$idCliente;
             $this->nombre=$lstRetorno[0]->nombre;
             $this->apellido=$lstRetorno[0]->apellido;
             $this->dni=$lstRetorno[0]->dni;
             $this->celular=$lstRetorno[0]->celular;
             $this->correo=$lstRetorno[0]->correo;
             $this->clave=$lstRetorno[0]->clave;
+          
             return $lstRetorno[0];
         }
         return null;
+        
+    }
+    public function eliminar()
+    {
+            $sql = "DELETE FROM clientes WHERE
+            idcliente=?";
+        $affected = DB::delete($sql, [$this->idcliente]);
         
     }
 

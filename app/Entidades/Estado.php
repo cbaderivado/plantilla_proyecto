@@ -20,6 +20,7 @@ class Estado extends Model
     
     function cargarDesdeRequest($request) {
         $this->idestado = $request->input('id')!= "0" ? $request->input('id') : $this->idestado;
+        //print_r($this->idestado);exit;
         $this->nombre =$request->input('txtNombre');
     }
 
@@ -58,7 +59,7 @@ class Estado extends Model
 
     public function guardar() {
        $sql = "UPDATE estados SET
-            nombre='$this->nombre',
+            nombre='$this->nombre'
             WHERE idestado= ?"; 
         $affected = DB::update($sql, [$this->idestado]);
     }
@@ -86,17 +87,25 @@ class Estado extends Model
         }
         return null;
     }
-    public function obtenerPorIdEstado($idEstado){
+    public function obtenerPorId($idEstado){
         $sql = "SELECT
                 A.nombre
                 FROM estados A
                 WHERE A.idestado = '$idEstado'";
             $lstRetorno = DB::select($sql);
            if(count($lstRetorno)>0){
+            $this->idestado=$idEstado;
             $this->nombre=$lstRetorno[0]->nombre;
             return $lstRetorno[0];
         }
         return null;
+        
+    }
+    public function eliminar()
+    {
+            $sql = "DELETE FROM estados WHERE
+            idestado=?";
+        $affected = DB::delete($sql, [$this->idestado]);
         
     }
 

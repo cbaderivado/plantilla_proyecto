@@ -86,7 +86,7 @@ class TipoProducto extends Model
         }
         return null;
     }
-    public function obtenerPorIdTipoProducto($idTipoProducto){
+    public function obtenerPorId($idTipoProducto){
         $sql = "SELECT
                 A.nombre
                 FROM tipo_productos A

@@ -29,6 +29,7 @@
 @endsection
 @section('contenido')
 <?php
+
 if (isset($msg)) {
       echo '<div id = "msg"></div>';
       echo '<script>msgShow("' . $msg["MSG"] . '", "' . $msg["ESTADO"] . '")</script>';
@@ -47,12 +48,12 @@ if (isset($msg)) {
                   <input type="hidden" id="id" name="id" class="form-control" value="{{$globalId}}" required>
                   <div class="form-group col-lg-6">
                         <label>Nombre: *</label>
-                        <input type="text" id="txtNombre" name="txtNombre" class="form-control" value="" required>
+                        <input type="text" id="txtNombre" name="txtNombre" class="form-control" value="{{$producto->nombre}}" required>
                   </div>
 
                   <div class="form-group col-lg-6">
                         <label>Descripcion: *</label>
-                        <input type="text" id="txtDescripcion" name="txtDescripcion" class="form-control" value="" required>
+                        <input type="text" id="txtDescripcion" name="txtDescripcion" class="form-control" value="{{$producto->descripcion}}" required>
                   </div>
             </div>
             <div class="row">
@@ -60,19 +61,21 @@ if (isset($msg)) {
                   <input type="hidden" id="id" name="id" class="form-control" value="{{$globalId}}" required>
                   <div class="form-group col-lg-6">
                         <label>Precio: *</label>
-                        <input type="text" id="txtPrecio" name="txtPrecio" class="form-control" value="" required>
+                        <input type="text" id="txtPrecio" name="txtPrecio" class="form-control" value="{{$producto->precio}}" required>
                   </div>
 
                   <div class="form-group col-lg-6">
                         <label>Tipo de Producto:</label>
                         <select id="lstTipoProducto" name="lstTipoProducto" class="form-control">
-                              <option selected disabled >Seleccionar</option>
-
-                              @for ($i = 0; $i < count($array_tipoproducto); $i++) @if (isset($tipoproducto)) <opti on selected value="{{ $array_tipoproducto[$i]->idtipoproducto }}">{{ $array_tipoproducto[$i]->nombre }}</option>
-                                    @else
-                                    <option value="{{ $array_tipoproducto[$i]->idtipoproducto }}">{{ $array_tipoproducto[$i]->nombre }}</option>
-                                    @endif
-                                    @endfor
+                              @if($globalId>0)
+                              <option selected value="{{ $aProductos->fk_idtipoproducto }}">{{ $aProductos->tipoProducto }}</option>
+                              @else
+                              <option selected disabled>Seleccionar</option>
+                              @endif
+                              @foreach ($aTipoProductos as $item)
+                              <option value="{{ $item->idtipoproducto }}">{{ $item->nombre }}</option>
+                              @endforeach
+                             
 
                         </select>
                   </div>
@@ -80,12 +83,12 @@ if (isset($msg)) {
             <div class="row">
                   <div class="form-group col-lg-6">
                         <label>Cantidad: *</label>
-                        <input type="text" id="txtCantidad" name="txtCantidad" class="form-control" value="" required>
+                        <input type="text" id="txtCantidad" name="txtCantidad" class="form-control" value="{{$producto->cantidad}}" required>
                   </div>
 
                   <div class="form-group col-lg-6">
                         <label>Imagen: *</label>
-                        <input type="img" id="txtimagen" name="txtimagen" class="form-control" value="" required>
+                        <input type="img" id="txtimagen" name="txtimagen" class="form-control" value="{{$producto->imagen}}" required>
                   </div>
             </div>
             <div class="modal fade" id="mdlEliminar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
@@ -120,26 +123,38 @@ if (isset($msg)) {
                   }
 
                   function eliminar() {
-                        $.ajax({
-                              type: "GET",
-                              url: "{{ asset('admin/cliente/eliminar') }}",
-                              data: {
-                                    id: globalId
-                              },
-                              async: true,
-                              dataType: "json",
-                              success: function(data) {
-                                    if (data.err = "0") {
-                                          msgShow("Registro eliminado exitosamente.", "success");
-                                          $("#btnEnviar").hide();
-                                          $("#btnEliminar").hide();
-                                          $('#mdlEliminar').modal('toggle');
-                                    } else {
-                                          msgShow("Error al eliminar", "success");
-                                    }
+                  $.ajax({
+                        type: "GET",
+                        url: "{{ asset('admin/producto/eliminar') }}",
+                        data: {
+                              id: globalId
+                        },
+                        async: true,
+                        dataType: "json",
+                        success: function(data) {
+                              mensaje = "";
+                              tipo = "";
+
+                              if (data.err == "0") {
+                                    mensaje = "Registro eliminado exitosamente.";
+                                    tipo = "success";
+                                    quitarcartel(mensaje, tipo);
+                                    location.href = '/admin/productos';
+                              } else {
+                                    mensaje = data.err;
+                                    tipo = "danger";
+                                    quitarcartel(mensaje, tipo);
                               }
-                        });
-                  }
+                        }
+                  });
+            }
+
+            function quitarcartel(mensaje, tipo) {
+                  msgShow(mensaje, tipo);
+                  $("#btnEnviar").hide();
+                  $("#btnEliminar").hide();
+                  $('#mdlEliminar').modal('toggle');
+            }
             </script>
       </form>
       @endsection

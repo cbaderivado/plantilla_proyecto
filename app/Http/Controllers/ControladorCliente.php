@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Entidades\Cliente; //include_once "app/Entidades/Sistema/Menu.php";
 use App\Entidades\Sistema\Patente;
 use App\Entidades\Sistema\Usuario;
+use Illuminate\Database\QueryException;
 use Illuminate\Http\Request;
 
 require app_path() . '/start/constants.php';
@@ -14,8 +15,9 @@ class ControladorCliente extends Controller
     public function nuevo()
     {
         $titulo = "Nuevo cliente";
+        $cliente = new cliente();
 
-        return view('cliente.cliente-nuevo', compact('titulo'));
+        return view('cliente.cliente-nuevo', compact('titulo', 'cliente'));
     }
     public function guardar(Request $request)
     {
@@ -24,12 +26,14 @@ class ControladorCliente extends Controller
             $titulo = "Modificar cliente";
             $entidad = new Cliente();
             $entidad->cargarDesdeRequest($request);
+            $_POST["id"] = $entidad->idcliente;
 
             //validaciones
             if ($entidad->nombre == "") {
                 $msg["ESTADO"] = MSG_ERROR;
                 $msg["MSG"] = "Complete todos los datos";
             } else {
+
                 if ($_POST["id"] > 0) {
                     //Es actualizacion
                     $entidad->guardar();
@@ -44,7 +48,6 @@ class ControladorCliente extends Controller
                     $msg["MSG"] = OKINSERT;
                 }
 
-                $_POST["id"] = $entidad->idcliente;
                 return view('cliente.cliente-listar', compact('titulo', 'msg'));
             }
         } catch (Exception $e) {
@@ -103,5 +106,48 @@ class ControladorCliente extends Controller
             "data" => $data,
         );
         return json_encode($json_data);
+    }
+    public function editar($id)
+    {
+        $titulo = "Modificar cliente";
+        if (Usuario::autenticado() == true) {
+            if (!Patente::autorizarOperacion("MENUMODIFICACION")) {
+                $codigo = "MENUMODIFICACION";
+                $mensaje = "No tiene pemisos para la operaci&oacute;n.";
+                return view('sistema.pagina-error', compact('titulo', 'codigo', 'mensaje'));
+            } else {
+                $cliente = new cliente();
+                $cliente->obtenerPorId($id);
+
+                return view('cliente.cliente-nuevo', compact('cliente', 'titulo'));
+            }
+        } else {
+            return redirect('admin/login');
+        }
+    }
+    public function eliminar(Request $request)
+    {
+        $id = $request->input('id');
+
+        if (Usuario::autenticado() == true) {
+            if (Patente::autorizarOperacion("MENUELIMINAR")) {
+
+                $entidad = new Cliente();
+                $entidad->cargarDesdeRequest($request);
+                try {
+                    $entidad->eliminar();
+                    $aResultado["err"] = EXIT_SUCCESS; //eliminado correctamente
+                } catch (QueryException $e) {
+
+                    $aResultado["err"] = $e->getMessage();
+                }
+            } else {
+                $codigo = "ELIMINARPROFESIONAL";
+                $aResultado["err"] = "No tiene pemisos para la operaci&oacute;n.";
+            }
+            echo json_encode($aResultado);
+        } else {
+            return redirect('admin/login');
+        }
     }
 }

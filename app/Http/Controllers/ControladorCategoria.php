@@ -14,8 +14,9 @@ class ControladorCategoria extends Controller
     public function nuevo()
     {
         $titulo = "Nueva categoria";
+        $categoria = new Categoria();
 
-        return view('categoria.categoria-nuevo', compact('titulo'));
+        return view('categoria.categoria-nuevo', compact('titulo', 'categoria'));
     }
     public function guardar(Request $request)
     {
@@ -24,12 +25,15 @@ class ControladorCategoria extends Controller
             $titulo = "Modificar categoria";
             $entidad = new Categoria();
             $entidad->cargarDesdeRequest($request);
+            $_POST["id"] = $entidad->idcategoria;
 
             //validaciones
             if ($entidad->nombre == "") {
                 $msg["ESTADO"] = MSG_ERROR;
                 $msg["MSG"] = "Complete todos los datos";
             } else {
+
+
                 if ($_POST["id"] > 0) {
                     //Es actualizacion
                     $entidad->guardar();
@@ -44,7 +48,6 @@ class ControladorCategoria extends Controller
                     $msg["MSG"] = OKINSERT;
                 }
 
-                $_POST["id"] = $entidad->idcliente;
                 return view('categoria.categoria-listar', compact('titulo', 'msg'));
             }
         } catch (Exception $e) {
@@ -84,8 +87,8 @@ class ControladorCategoria extends Controller
 
         for ($i = $inicio; $i < count($aCategorias) && $cont < $registros_por_pagina; $i++) {
             $row = array();
-            $row[] = '<a href="/admin/categoria/nuevo/' . $aCategorias[$i]->idcategoria . '">' . $aCategorias[$i]->nombre. '</a>';
-            
+            $row[] = '<a href="/admin/categoria/nuevo/' . $aCategorias[$i]->idcategoria . '">' . $aCategorias[$i]->nombre . '</a>';
+
             $cont++;
             $data[] = $row;
         }
@@ -97,5 +100,48 @@ class ControladorCategoria extends Controller
             "data" => $data,
         );
         return json_encode($json_data);
+    }
+    public function editar($id)
+    {
+        $titulo = "Modificar Categoria";
+        if (Usuario::autenticado() == true) {
+            if (!Patente::autorizarOperacion("MENUMODIFICACION")) {
+                $codigo = "MENUMODIFICACION";
+                $mensaje = "No tiene pemisos para la operaci&oacute;n.";
+                return view('sistema.pagina-error', compact('titulo', 'codigo', 'mensaje'));
+            } else {
+                $categoria = new Categoria();
+                $categoria->obtenerPorId($id);
+
+                return view('categoria.categoria-nuevo', compact('categoria', 'titulo'));
+            }
+        } else {
+            return redirect('admin/login');
+        }
+    }
+    public function eliminar(Request $request)
+    {
+        $id = $request->input('id');
+
+        if (Usuario::autenticado() == true) {
+            if (Patente::autorizarOperacion("MENUELIMINAR")) {
+
+                $entidad = new Categoria();
+                $entidad->cargarDesdeRequest($request);
+                try {
+                    $entidad->eliminar();
+                    $aResultado["err"] = EXIT_SUCCESS; //eliminado correctamente
+                } catch (QueryException $e) {
+                    $aResultado["err"] = $e->getMessage();
+                }
+            } else {
+                $codigo = "ELIMINARPROFESIONAL";
+                $aResultado["err"] = "No tiene pemisos para la operaci&oacute;n.";
+            }
+            echo json_encode($aResultado);
+        } else {
+            return redirect('admin/login');
+        }
+       
     }
 }

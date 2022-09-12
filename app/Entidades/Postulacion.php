@@ -109,7 +109,7 @@ class Postulacion extends Model
             documento='$this->documento',
             correo='$this->correo',
             archivo_cv='$this->archivo_cv'
-            WHERE idpedido= ?"; 
+            WHERE idpostulacion= ?"; 
         $affected = DB::update($sql, [$this->idpostulacion]);
     }
 
@@ -157,7 +157,7 @@ class Postulacion extends Model
     }
 
   
-    public function obtenerPorIdPostulacion($idPostulacion){
+    public function obtenerPorId($idPostulacion){
         $sql = "SELECT
                 A.idpostulacion,
                 A.nombre,
@@ -171,6 +171,7 @@ class Postulacion extends Model
                 WHERE A.idpostulacion = '$idPostulacion'";
             $lstRetorno = DB::select($sql);
             if(count($lstRetorno)>0){
+                $this->idpostulacion=$lstRetorno[0]->idpostulacion;
                 $this->nombre=$lstRetorno[0]->nombre;
                 $this->apellido=$lstRetorno[0]->apellido;
                 $this->localidad=$lstRetorno[0]->localidad;
@@ -181,6 +182,13 @@ class Postulacion extends Model
                 return $lstRetorno[0];
         }
         return null;
+        
+    }
+    public function eliminar()
+    {
+            $sql = "DELETE FROM postulaciones WHERE
+            idpostulacion=?";
+        $affected = DB::delete($sql, [$this->idpostulacion]);
         
     }
 

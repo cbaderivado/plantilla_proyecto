@@ -3,7 +3,8 @@
 @section('scripts')
 <script>
     globalId = '<?php echo isset($cliente->idcliente) && $cliente->idcliente > 0 ? $cliente->idcliente : 0; ?>';
-    <?php $globalId = isset($cliente->idcliente) ? $cliente->idcliente : "0";?>
+    <?php $globalId = isset($cliente->idcliente) ? $cliente->idcliente : "0";
+    ?>
 </script>
 @endsection
 @section('breadcrumb')
@@ -22,13 +23,14 @@
     <li class="btn-item"><a title="Salir" href="#" class="fa fa-arrow-circle-o-left" aria-hidden="true" onclick="javascript: $('#modalSalir').modal('toggle');"><span>Salir</span></a></li>
 </ol>
 <script>
-function fsalir(){
-    location.href ="/admin/";
-}
+    function fsalir() {
+        location.href = "/admin/";
+    }
 </script>
 @endsection
 @section('contenido')
 <?php
+
 if (isset($msg)) {
     echo '<div id = "msg"></div>';
     echo '<script>msgShow("' . $msg["MSG"] . '", "' . $msg["ESTADO"] . '")</script>';
@@ -47,35 +49,35 @@ if (isset($msg)) {
             <input type="hidden" id="id" name="id" class="form-control" value="{{$globalId}}" required>
             <div class="form-group col-lg-6">
                 <label>Nombre: *</label>
-                <input type="text" id="txtNombre" name="txtNombre" class="form-control" value="" required>
+                <input type="text" id="txtNombre" name="txtNombre" class="form-control" value="{{$cliente->nombre}}" required>
             </div>
             <div class="form-group col-lg-6">
                 <label>Apellido: *</label>
-                <input type="text" id="txtApellido" name="txtApellido" class="form-control" value="" required>
+                <input type="text" id="txtApellido" name="txtApellido" class="form-control" value="{{$cliente->apellido}}" required>
             </div>
         </div>
         <div class="row">
             <div class="form-group col-lg-6">
                 <label>Documento: *</label>
-                <input type="text" id="txtDni" name="txtDni" class="form-control" value="" required>
+                <input type="text" id="txtDni" name="txtDni" class="form-control" value="{{$cliente->dni}}" required>
             </div>
             <div class="form-group col-lg-6">
                 <label>Celular: *</label>
-                <input type="text" id="txtCelular" name="txtCelular" class="form-control" value="" required>
+                <input type="text" id="txtCelular" name="txtCelular" class="form-control" value="{{$cliente->celular}}" required>
             </div>
         </div>
         <div class="row">
 
             <div class="form-group col-lg-6">
                 <label>Correo: *</label>
-                <input type="text" id="txtCorreo" name="txtCorreo" class="form-control" value="" required>
+                <input type="text" id="txtCorreo" name="txtCorreo" class="form-control" value="{{$cliente->correo}}" required>
             </div>
             <div class="form-group col-lg-6">
                 <label>Clave: *</label>
-                <input type="text" id="txtClave" name="txtClave" class="form-control" value="" required>
+                <input type="text" id="txtClave" name="txtClave" class="form-control" value="{{$cliente->clave}}" required>
             </div>
         </div>
-      
+
 
     </form>
 </div>
@@ -120,16 +122,29 @@ if (isset($msg)) {
             async: true,
             dataType: "json",
             success: function(data) {
-                if (data.err = "0") {
-                    msgShow("Registro eliminado exitosamente.", "success");
-                    $("#btnEnviar").hide();
-                    $("#btnEliminar").hide();
-                    $('#mdlEliminar').modal('toggle');
+                mensaje = "";
+                tipo = "";
+
+                if (data.err == "0") {
+                    mensaje = "Registro eliminado exitosamente.";
+                    tipo = "success";
+                    quitarcartel(mensaje, tipo);
+                    location.href = '/admin/clientes';
                 } else {
-                    msgShow("Error al eliminar", "success");
+                    mensaje = data.err;
+                    tipo = "danger";
+                    quitarcartel(mensaje, tipo);
                 }
+
             }
         });
     }
+
+    function quitarcartel(mensaje, tipo) {
+        msgShow(mensaje, tipo);
+        $("#btnEnviar").hide();
+        $("#btnEliminar").hide();
+        $('#mdlEliminar').modal('toggle');
+    }
 </script>
-    @endsection
+@endsection

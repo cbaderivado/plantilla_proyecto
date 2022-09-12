@@ -4,6 +4,7 @@ namespace App\Entidades;
 
 use Illuminate\Database\Eloquent\Model;
 use DB;
+use Exception;
 use Session;
 require app_path().'/start/constants.php';
 
@@ -58,8 +59,8 @@ class Categoria extends Model
 
     public function guardar() {
        $sql = "UPDATE categorias SET
-            nombre='$this->nombre',
-            WHERE idcliente= ?"; 
+            nombre='$this->nombre'
+            WHERE idcategoria= ?"; 
         $affected = DB::update($sql, [$this->idcategoria]);
     }
     public function obtenerTodos() {
@@ -86,20 +87,29 @@ class Categoria extends Model
         }
         return null;
     }
-    public function obtenerPorIdcategoria($idCategoria){
+    public function obtenerPorId($idCategoria){
         $sql = "SELECT
+              
                 A.nombre
                 FROM categorias A
                 WHERE A.idcategoria = '$idCategoria'";
             $lstRetorno = DB::select($sql);
            if(count($lstRetorno)>0){
+            $this->idcategoria=$idCategoria;
             $this->nombre=$lstRetorno[0]->nombre;
             return $lstRetorno[0];
         }
         return null;
         
     }
+    public function eliminar()
+    {
+        
+            $sql = "DELETE FROM categorias WHERE
+            idcategoria=?";
+            
+        DB::delete($sql, [$this->idcategoria]);
+        
+    }
 
 }
-
-?>

@@ -147,19 +147,22 @@ class Producto extends Model
     }
 
   
-    public function obtenerPorIdPostulacion($idProducto){
+    public function obtenerPorId($idProducto){
         $sql = "SELECT
-                .idproducto,
+                A.idproducto,
                 A.nombre,
                 A.precio,
                 A.descripcion,
                 A.imagen,
                 A.fk_idtipoproducto,
+                B.nombre as tipoProducto,
                 A.cantidad
-                FROM productos A
+                FROM productos A LEFT JOIN tipo_productos B
+                ON A.fk_idtipoproducto=B.idtipoproducto
                 WHERE A.idproducto = '$idProducto'";
         $lstRetorno = DB::select($sql);
         if(count($lstRetorno)>0){
+            $this->idproducto=$idProducto;
             $this->nombre=$lstRetorno[0]->nombre;
             $this->precio=$lstRetorno[0]->precio;
             $this->descripcion=$lstRetorno[0]->descripcion;
@@ -169,6 +172,13 @@ class Producto extends Model
                 return $lstRetorno[0];
         }
         return null;
+        
+    }
+    public function eliminar()
+    {
+            $sql = "DELETE FROM productos WHERE
+            idproducto=?";
+        $affected = DB::delete($sql, [$this->idproducto]);
         
     }
 

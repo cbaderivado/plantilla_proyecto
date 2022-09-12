@@ -112,7 +112,7 @@ class Pedido extends Model
 
     public function guardar() {
        $sql = "UPDATE pedidos SET
-            nombre='$this->fecha',
+            fecha='$this->fecha',
             descripcion='$this->descripcion',
             fk_idsucursal='$this->fk_idsucursal',
             fk_idestado='$this->fk_idestado',
@@ -139,44 +139,32 @@ class Pedido extends Model
         return $lstRetorno;
     }
 
-    // public function obtenerPorNombre($nombre) {
-    //     $sql = "SELECT
-    //             A.nombre,
-    //             A.apellido,
-    //             A.dni,
-    //             A.celular,
-    //             A.correo,
-    //             A.clave
-    //             FROM clientes A
-    //             WHERE A.nombre = '$nombre'";
-    //     $lstRetorno = DB::select($sql);
-    //     if(count($lstRetorno)>0){
-    //         $this->nombre=$lstRetorno[0]->nombre;
-    //         $this->apellido=$lstRetorno[0]->apellido;
-    //         $this->dni=$lstRetorno[0]->dni;
-    //         $this->celular=$lstRetorno[0]->celular;
-    //         $this->correo=$lstRetorno[0]->correo;
-    //         $this->clave=$lstRetorno[0]->clave;
-    //         return $lstRetorno[0];
-    //     }
-    //     return null;
-    // }
-
+    
   
-    public function obtenerPorIdPedido($idPedido){
+    public function obtenerPorId($idPedido){
         $sql = "SELECT
                 A.idpedido,
-                A.fecha,
+				A.fecha,
                 A.descripcion,
                 A.fk_idsucursal,
+                B.nombre AS sucursal,
                 A.fk_idcliente,
+                CONCAT(C.nombre,' ',C.apellido) AS cliente,
                 A.fk_idestado,
+                D.nombre AS estado,
                 A.fk_idestadopago,
+                E.nombre AS estadoPago,
                 A.total
-                FROM pedido A
+                FROM pedidos A
+                LEFT JOIN sucursales B ON A.fk_idsucursal=B.idsucursal
+                LEFT JOIN clientes C ON A.fk_idcliente=C.idcliente
+                LEFT JOIN estados D ON A.fk_idestado=D.idestado
+                LEFT JOIN estado_pagos E ON A.fk_idestadopago=E.idestadopago
+                
                 WHERE A.idpedido = '$idPedido'";
             $lstRetorno = DB::select($sql);
            if(count($lstRetorno)>0){
+            $this->idpedido=$idPedido;
             $this->fecha=$lstRetorno[0]->fecha;
             $this->descripcion=$lstRetorno[0]->descripcion;
             $this->fk_idsucursal=$lstRetorno[0]->fk_idsucursal;
@@ -187,6 +175,13 @@ class Pedido extends Model
             return $lstRetorno[0];
         }
         return null;
+        
+    }
+    public function eliminar()
+    {
+            $sql = "DELETE FROM pedidos WHERE
+            idpedido=?";
+        $affected = DB::delete($sql, [$this->idpedido]);
         
     }
 

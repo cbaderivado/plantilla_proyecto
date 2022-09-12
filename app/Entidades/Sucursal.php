@@ -81,7 +81,7 @@ class Sucursal extends Model
     }
 
     public function guardar() {
-       $sql = "UPDATE sucusales SET
+       $sql = "UPDATE sucursales SET
             nombre='$this->nombre',
             direccion='$this->direcicon',
             telefono='$this->telefono',
@@ -106,7 +106,7 @@ class Sucursal extends Model
 
     public function obtenerPorNombre($nombre) {
         $sql = "SELECT 
-                A.idsucural,
+                A.idsucursal,
                 A.nombre,
                 A.direccion,
                 A.telefono,
@@ -126,9 +126,9 @@ class Sucursal extends Model
     }
 
   
-    public function obtenerPorIdSucursal($idSucursal){
+    public function obtenerPorId($idSucursal){
         $sql = "SELECT 
-        A.idsucural,
+        A.idsucursal,
         A.nombre,
         A.direccion,
         A.telefono,
@@ -137,6 +137,7 @@ class Sucursal extends Model
                 WHERE A.idsucursal = '$idSucursal'";
             $lstRetorno = DB::select($sql);
             if(count($lstRetorno)>0){
+                $this->idsucursal=$idSucursal;
                 $this->nombre=$lstRetorno[0]->nombre;
                 $this->direccion=$lstRetorno[0]->direccion;
                 $this->telefono=$lstRetorno[0]->telefono;
@@ -146,7 +147,13 @@ class Sucursal extends Model
         return null;
         
     }
-
+    public function eliminar()
+    {
+            $sql = "DELETE FROM sucursales WHERE
+            idsucursal=?";
+        $affected = DB::delete($sql, [$this->idsucursal]);
+        
+    }
 }
 
 ?>
