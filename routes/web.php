@@ -17,7 +17,11 @@
 Route::group(array('domain' => '127.0.0.1'), function () {
 
     Route::get('/', 'ControladorWebHome@index');
- 
+    Route::get('/takeaway', 'ControladorTakeaway@index');
+    Route::get('/nosotros', 'ControladorNosotros@index');
+    Route::get('/contacto', 'ControladorContacto@index');
+    Route::get('/mi-cuenta', 'ControladorMiCuenta@index');
+    
 
     Route::get('/admin', 'ControladorHome@index');
     Route::post('/admin/patente/nuevo', 'ControladorPatente@guardar');
@@ -166,7 +170,7 @@ Route::get('/admin/categoria/nuevo', 'ControladorCategoria@nuevo');
 Route::post('/admin/categoria/nuevo', 'ControladorCategoria@guardar'); 
 Route::get('/admin/categorias', 'ControladorCategoria@index'); 
 Route::get('/admin/categoria/cargarGrilla', 'ControladorCategoria@cargarGrilla')->name('categoria.cargarGrilla');
-Route::get('/admin/categoria/eliminar', 'ControladorCategoria@eliminar');
+Route::get(' ', 'ControladorCategoria@eliminar');
 Route::get('/admin/categoria/nuevo/{id}', 'ControladorCategoria@editar');
 Route::post('/admin/categoria/nuevo/{id}', 'ControladorCategoria@guardar'); 
 
