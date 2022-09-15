@@ -25,7 +25,8 @@ class Pedido extends Model
     
     function cargarDesdeRequest($request) {
         $this->idpedido = $request->input('id')!= "0" ? $request->input('id') : $this->idpedido;
-        $this->fecha =$request->input('txtfecha');
+        //tomo el date que da el formulario, lo paso al formato de la base de datos y de ahi a string
+        $this->fecha=date_format(date_create_from_format('Y-m-d',($request->input('txtfecha'))),'Y-m-d H:m:i');
         
         $this->descripcion=$request->input('txtDescripcion');
         $this->fk_idsucursal = $request->input('lstSucursal');
@@ -165,6 +166,8 @@ class Pedido extends Model
             $lstRetorno = DB::select($sql);
            if(count($lstRetorno)>0){
             $this->idpedido=$idPedido;
+            //Leo lo de la base y lo paso a formato que acepta el formulario
+            $lstRetorno[0]->fecha=(date_create_from_format('Y-m-d H:m:s',$lstRetorno[0]->fecha))->format('Y-m-d');
             $this->fecha=$lstRetorno[0]->fecha;
             $this->descripcion=$lstRetorno[0]->descripcion;
             $this->fk_idsucursal=$lstRetorno[0]->fk_idsucursal;
@@ -186,5 +189,3 @@ class Pedido extends Model
     }
 
 }
-
-?>

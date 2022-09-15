@@ -52,9 +52,9 @@ if (isset($msg)) {
             <input type="hidden" id="id" name="id" class="form-control" value="{{$globalId}}" required>
             <div class="form-group col-lg-6">
                 <label>Fecha: *</label>
-                
-                <input type="date" id="txtFecha" name="txtfecha" class="form-control" value="{{strtotime($aPedidos->fecha)}}" required>
-                
+
+                <input type="date" id="txtFecha" name="txtfecha" class="form-control" value="{{($aPedidos->fecha)}}" required>
+
             </div>
 
             <div class="form-group col-lg-6">
@@ -100,9 +100,9 @@ if (isset($msg)) {
                 <label>Estado:</label>
                 <select id="lstEstado" name="lstEstado" class="form-control">
                     @if ($globalId>0)
-                    <option selectedvalue="{{ $aPedidos->fk_idestado }}">{{ $aPedidos->estado }}</option>
+                    <option selected value="{{ $aPedidos->fk_idestado }}">{{ $aPedidos->estado }}</option>
                     @else
-                    <option selected disabled>Seleccionar</option>
+                    <option selectedvalue="" disabled>Seleccionar</option>
 
                     @endif
                     @foreach ($aEstados as $item)
