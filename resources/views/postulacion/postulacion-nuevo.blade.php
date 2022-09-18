@@ -32,6 +32,7 @@
 if (isset($msg)) {
     echo '<div id = "msg"></div>';
     echo '<script>msgShow("' . $msg["MSG"] . '", "' . $msg["ESTADO"] . '")</script>';
+
 }
 ?>
 <div class="panel-body">
@@ -41,7 +42,7 @@ if (isset($msg)) {
         echo '<script>msgShow("' . $msg["MSG"] . '", "' . $msg["ESTADO"] . '")</script>';
     }
     ?>
-    <form id="form1" method="POST">
+    <form id="form1"  enctype="multipart/form-data" method="POST">
         <div class="row">
             <input type="hidden" name="_token" value="{{ csrf_token() }}"></input>
             <input type="hidden" id="id" name="id" class="form-control" value="{{$globalId}}" required>
@@ -78,7 +79,7 @@ if (isset($msg)) {
         <div class="row">
             <div class="form-group col-lg-6">
                 <label>Adjuntar Curriculum: *</label>
-                <input type="text" id="txtLinkMapa" name="txtLinkMapa" class="form-control" value="{{$postulacion->archivo_cv}}" required>
+                <input type="file" id="txtArchivoCv" name="txtArchivoCv" class="form-control" value="{{$postulacion->archivo_cv}}" required>
             </div>
         </div>
 

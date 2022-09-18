@@ -16,14 +16,27 @@
 
 Route::group(array('domain' => '127.0.0.1'), function () {
 
+/* --------------------------------------------- */
+/* CONTROLADOR DE LA WEB                           */
+/* --------------------------------------------- */
     Route::get('/', 'ControladorWebHome@index');
     Route::get('/takeaway', 'ControladorTakeaway@index');
     Route::get('/nosotros', 'ControladorNosotros@index');
-    Route::get('/contacto', 'ControladorContacto@index');
-    Route::get('/mi-cuenta', 'ControladorMiCuenta@index');
+    Route::get('/gracias', 'ControladorNosotros@gracias')->name('nosotros.gracias');
     
-
+    Route::post('/nosotros', 'ControladorNosotros@guardarPostulacion')->name('nosotros.guardarPostulacion');
+    Route::get('/contacto', 'ControladorContacto@index');
+    Route::get('/contacto', 'ControladorContacto@enviar')->name('contacto.enviar');
+    Route::get('/mi-cuenta', 'ControladorMiCuenta@index');
+    Route::post('/mi-cuenta', 'ControladorMicuenta@ingresar')->name('miCuenta.ingresar');
+    Route::get('/registracion', 'ControladorRegistracion@index');
+    Route::post('/registracion', 'ControladorRegistracion@guardarCliente')->name ('registracion.guardarCliente');
+    Route::get('/nuevoCliente', 'ControladorRegistracion@nuevoCliente')->name('registracion.nuevoCliente');
     Route::get('/admin', 'ControladorHome@index');
+    Route::get('/recuperar', 'ControladorRecuperar@index');
+    Route::post('/recuperar', 'ControladorRecuperar@recuperar')->name('recuperar.recuperar');
+
+    
     Route::post('/admin/patente/nuevo', 'ControladorPatente@guardar');
 
 /* --------------------------------------------- */
@@ -140,6 +153,7 @@ Route::get('/admin/postulacion/cargarGrilla', 'ControladorPostulacion@cargarGril
 Route::get('/admin/postulacion/eliminar', 'ControladorPostulacion@eliminar');
 Route::get('/admin/postulacion/nuevo/{id}', 'ControladorPostulacion@editar');
 Route::post('/admin/postulacion/nuevo/{id}', 'ControladorPostulacion@guardar');
+
 
 /* --------------------------------------------- */
 /* CONTROLADOR SUCURSALES                          */

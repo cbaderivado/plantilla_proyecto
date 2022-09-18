@@ -88,7 +88,7 @@ if (isset($msg)) {
 
                   <div class="form-group col-lg-6">
                         <label>Imagen: *</label>
-                        <input type="img" id="txtimagen" name="txtimagen" class="form-control" value="{{$producto->imagen}}" required>
+                        <input type="img" id="txtImagen" name="txtImagen" class="form-control" value="{{$producto->imagen}}" required>
                   </div>
             </div>
             <div class="modal fade" id="mdlEliminar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">

@@ -157,6 +157,31 @@ class Cliente extends Model
         }
         return null;
     }
+    public function login($correo,$clave) {
+        $sql = "SELECT
+                A.idcliente,
+                A.nombre,
+                A.apellido,
+                A.dni,
+                A.celular,
+                A.correo,
+                A.clave
+                FROM clientes A
+                WHERE A.correo = '$correo' AND A.clave='$clave'";
+        $lstRetorno = DB::select($sql);
+
+        if(count($lstRetorno)>0){
+            $this->nombre=$lstRetorno[0]->idcliente;
+            $this->nombre=$lstRetorno[0]->nombre;
+            $this->apellido=$lstRetorno[0]->apellido;
+            $this->dni=$lstRetorno[0]->dni;
+            $this->celular=$lstRetorno[0]->celular;
+            $this->correo=$lstRetorno[0]->correo;
+            $this->clave=$lstRetorno[0]->clave;
+            return $lstRetorno[0];  
+        }
+        return false;
+    }
 
   
     public function obtenerPorId($idCliente){

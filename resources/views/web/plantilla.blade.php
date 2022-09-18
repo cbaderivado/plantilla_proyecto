@@ -1,6 +1,28 @@
 <!DOCTYPE html>
 <html>
-
+<?php
+$activeInicio="";
+$activeTakeaway="";
+$activeNosotros="";
+$activeContacto="";
+$activeMiCuenta="";
+if ($_SERVER['REQUEST_URI']=='/'){
+  $activeInicio="active";
+}
+elseif ($_SERVER['REQUEST_URI']=='/takeaway'){
+  $activeTakeaway="active";
+}
+elseif ($_SERVER['REQUEST_URI']=='/nosotros'){
+  $activeNosotros="active";
+}
+elseif ($_SERVER['REQUEST_URI']=='/contacto'){
+  $activeContacto="active";
+}
+elseif ($_SERVER['REQUEST_URI']=='/mi-cuenta'){
+  $activeMiCuenta="active";
+  $ocultar="hidden";
+}
+ ?>
 <head>
   <!-- Basic -->
   <meta charset="utf-8" />
@@ -13,7 +35,7 @@
   <meta name="author" content="" />
   <link rel="shortcut icon" href="web/images/favicon.png" type="">
 
-  <title> Feane </title>
+  <title> Burger SRL </title>
 
   <!-- bootstrap core css -->
   <link rel="stylesheet" type="text/css" href="web/css/bootstrap.css" />
@@ -42,9 +64,9 @@
     <header class="header_section">
       <div class="container">
         <nav class="navbar navbar-expand-lg custom_nav-container ">
-          <a class="navbar-brand" href="index.html">
+          <a class="navbar-brand" href="/">
             <span>
-              Feane
+              BURGER SRL
             </span>
           </a>
 
@@ -54,26 +76,26 @@
 
           <div class="collapse navbar-collapse" id="navbarSupportedContent">
             <ul class="navbar-nav  mx-auto ">
-              <li class="nav-item active">
+              <li class="nav-item {{$activeInicio}}">
                 <a class="nav-link" href="/">Inicio</a>
               </li>
-              <li class="nav-item">
+              <li class="nav-item  {{$activeTakeaway}}">
                 <a class="nav-link" href="/takeaway">Takeaway</a>
               </li>
-              <li class="nav-item">
+              <li class="nav-item {{$activeNosotros}}">
                 <a class="nav-link" href="/nosotros">Nosotros</a>
               </li>
-              <li class="nav-item">
+              <li class="nav-item {{$activeContacto}}">
                 <a class="nav-link" href="/contacto">Contacto</a>
               </li>
-              <li class="nav-item">
+              <li class="nav-item {{$activeMiCuenta}}">
                 <a class="nav-link" href="/mi-cuenta">Mi cuenta</a>
               </li>
             </ul>
             <div class="user_option">
-              <a href="" class="user_link">
+              <!-- <a href="" class="user_link">
                 <i class="fa fa-user" aria-hidden="true"></i>
-              </a>
+              </a> -->
               <a class="cart_link" href="#">
                 <svg version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 456.029 456.029" style="enable-background:new 0 0 456.029 456.029;" xml:space="preserve">
                   <g>
@@ -128,14 +150,16 @@
                   </g>
                 </svg>
               </a>
-              <form class="form-inline">
+              <!-- <form class="form-inline">
                 <button class="btn  my-2 my-sm-0 nav_search-btn" type="submit">
                   <i class="fa fa-search" aria-hidden="true"></i>
                 </button>
-              </form>
-              <a href="" class="order_online">
-                Order Online
+              </form> -->
+                <a href="/mi-cuenta" class="order_online">
+                   Ingresar
               </a>
+
+               
             </div>
           </div>
         </nav>
@@ -150,25 +174,26 @@
           <div class="col-md-4 footer-col">
             <div class="footer_contact">
               <h4>
-                Contact Us
+                Contacto
               </h4>
               <div class="contact_link_box">
-                <a href="">
+                
+                <a  target="_blank" href="https://www.google.com.ar/maps/place/60%C2%B044'22.3%22S+45%C2%B022'51.4%22W/@-60.7395274,-45.3831437,17z/data=!3m1!4b1!4m6!3m5!1s0x0:0x3b64213b07f540fd!7e2!8m2!3d-60.7395303!4d-45.3809553">
                   <i class="fa fa-map-marker" aria-hidden="true"></i>
                   <span>
-                    Location
+                    Ubicación
                   </span>
                 </a>
                 <a href="">
                   <i class="fa fa-phone" aria-hidden="true"></i>
                   <span>
-                    Call +01 1234567890
+                    +54 9 3416436814
                   </span>
                 </a>
                 <a href="">
                   <i class="fa fa-envelope" aria-hidden="true"></i>
                   <span>
-                    demo@gmail.com
+                    mimail@yopmail.com
                   </span>
                 </a>
               </div>
@@ -177,10 +202,10 @@
           <div class="col-md-4 footer-col">
             <div class="footer_detail">
               <a href="" class="footer-logo">
-                Feane
+                Burger SRL
               </a>
               <p>
-                Necessary, making this the first true generator on the Internet. It uses a dictionary of over 200 Latin words, combined with
+                Gusanos de primera calidad
               </p>
               <div class="footer_social">
                 <a href="">
@@ -203,13 +228,13 @@
           </div>
           <div class="col-md-4 footer-col">
             <h4>
-              Opening Hours
+              Horario de atención
             </h4>
             <p>
-              Everyday
+              Todos los días
             </p>
             <p>
-              10.00 Am -10.00 Pm
+              10.00 Am - 02.00 Am
             </p>
           </div>
         </div>

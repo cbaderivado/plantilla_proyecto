@@ -108,7 +108,7 @@ class Producto extends Model
 
     public function obtenerTodos() {
         $sql = "SELECT 
-                .idproducto,
+                A.idproducto,
                 A.nombre,
                 A.precio,
                 A.descripcion,

@@ -24,6 +24,9 @@ class Postulacion extends Model
                             ];
     
     function cargarDesdeRequest($request) {
+        // if (isset($_POST)){
+        //     print_r($_FILES);}exit;
+          
         $this->idpostulacion = $request->input('id')!= "0" ? $request->input('id') : $this->idpostulacion;
         $this->nombre=$request->input('txtNombre');
         $this->apellido=$request->input('txtApellido');
@@ -31,7 +34,37 @@ class Postulacion extends Model
         $this->documento =  $request->input('txtDocumento');
         $this->correo = $request->input('txtCorreo');
         $this->telefono = $request->input('txtTelefono');
-        $this->archivo_cv = $request->input('txtArchivoCv');
+        $this->archivo_cv = isset($_FILES["txtArchivoCv"])? $this->cargarImagen($request->input('txtArchivoCv')):"";
+    }
+    function cargarImagen($ruta_actual=null){
+        $ruta="";
+        if ($_FILES["txtArchivoCv"]["error"]===UPLOAD_ERR_OK)
+        {
+            $nombreAleatorio=date("YmdHis");
+            $archivoTmp=$_FILES["txtArchivoCv"]["tmp_name"];
+            $nombreArchivo=$_FILES["txtArchivoCv"]["name"];
+            $extencion=pathinfo($nombreArchivo,PATHINFO_EXTENSION);
+            
+            $tieneExtencion=str_contains($nombreArchivo,$extencion);
+                    if($tieneExtencion)
+                    {
+                        $ruta="web/cv/$nombreAleatorio.$nombreArchivo";    
+                    }
+                    else
+                    {
+                        $ruta="web/cv/$nombreAleatorio.$nombreArchivo.$extencion";
+                    }
+                    move_uploaded_file($archivoTmp,"$ruta");
+                    if($ruta_actual!=null && strlen($ruta_actual)>0){$this->borrarArchivos($ruta_actual);}
+
+
+            
+        }
+        if(strlen($ruta)==0){ $ruta=$ruta_actual;}
+        
+        return $ruta;
+        
+        
     }
 
     public function obtenerFiltrado() {
@@ -193,6 +226,3 @@ class Postulacion extends Model
     }
 
 }
-
-?>
-
