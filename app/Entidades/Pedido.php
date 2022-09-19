@@ -187,19 +187,23 @@ class Pedido extends Model
                 B.nombre AS sucursal,
                 D.nombre AS estado,
                 E.nombre AS estadoPago,
-                A.total
+                A.total,
+                A.fk_idcliente,
+                A.fk_idestado,
+                A.fk_idestadopago
                 FROM pedidos A
                 LEFT JOIN sucursales B ON A.fk_idsucursal=B.idsucursal
                 LEFT JOIN clientes C ON A.fk_idcliente=C.idcliente
                 LEFT JOIN estados D ON A.fk_idestado=D.idestado
                 LEFT JOIN estado_pagos E ON A.fk_idestadopago=E.idestadopago
-                
                 WHERE A.fk_idcliente = '$idCliente'";
             $lstRetorno = DB::select($sql);
            if(count($lstRetorno)>0){
             //Leo lo de la base y lo paso a formato que acepta el formulario
-            $lstRetorno[0]->fecha=(date_create_from_format('Y-m-d H:m:s',$lstRetorno[0]->fecha))->format('d-m-Y');
-           // print_r($lstRetorno);exit;
+            foreach ($lstRetorno as $item){
+
+                $item->fecha=(date_create_from_format('Y-m-d H:m:s',$item->fecha))->format('d-m-Y');
+            }
             return $lstRetorno;
         }
         return null;

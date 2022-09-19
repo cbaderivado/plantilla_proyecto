@@ -27,11 +27,11 @@
     </div>
   </div>
 </section>
-<section class="about_section text-white">
+<section class="about_section text-white mt-5">
   <div class="container">
     <div class="row">
       <div class="form-group col-lg-12">
-        <table id="grilla" class="display">
+        <table id="grilla" class=" table text-white display">
           <thead>
             <tr>
               <th>Fecha</th>

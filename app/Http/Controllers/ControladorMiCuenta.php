@@ -12,15 +12,17 @@ class ControladorMiCuenta extends Controller
 {
     public function index()
     {
-            return view ("web.mi-cuenta");
+        $cliente=new Cliente();
+        
+        return view ("web.mi-cuenta",compact('cliente'));
     }
     public function ingresar(Request $request)
     {
         $cliente=new Cliente();
         $cliente=$cliente->login($request->input('txtCorreo'),$request->input('txtPassword'));
         $pedido=new Pedido();
-        $aPedidos=$cliente->idcliente!=false? $pedido->obtenerPorIdCliente($cliente->idcliente):'';
-       // print_r($aPedidos);exit;
+        $aPedidos=$cliente!=false? $pedido->obtenerPorIdCliente($cliente->idcliente):'';
+       
         if(!$cliente){
                         $titulo = 'Acceso denegado';
                         $msg["ESTADO"] = MSG_ERROR;
