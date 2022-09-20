@@ -4,7 +4,9 @@ namespace App\Entidades;
 
 use Illuminate\Database\Eloquent\Model;
 use DB;
+use Exception;
 use Illuminate\Database\QueryException;
+use PhpParser\Node\Expr\Print_;
 use PhpParser\Node\Stmt\Catch_;
 use Session;
 require app_path().'/start/constants.php';
@@ -26,13 +28,15 @@ class Cliente extends Model
                             ];
     
     function cargarDesdeRequest($request) {
+
         $this->idcliente = $request->input('id')!= "0" ? $request->input('id') : $this->idcliente;
         $this->nombre =$request->input('txtNombre');
         $this->apellido = $request->input('txtApellido');
         $this->dni = $request->input('txtDni');
         $this->celular =  $request->input('txtCelular');
         $this->correo = $request->input('txtCorreo');
-        $this->clave = $request->input('txtClave');
+        $this->clave = $request->input('txtClave')!=null && $request->input('txtClave') != "" ? $this->encriptarClave($request->input('txtClave')) : $this->clave;
+        
     }
 
     public function obtenerFiltrado() {
@@ -72,7 +76,6 @@ class Cliente extends Model
         return $lstRetorno;
     }
 
-
     public function encriptarClave($clave){
         $claveEncriptada = password_hash($clave, PASSWORD_DEFAULT);
         return $claveEncriptada;
@@ -83,7 +86,7 @@ class Cliente extends Model
     }
 
      public function insertar() {
-        $now = new \DateTime();
+        
 
             $sql = "INSERT INTO clientes (
                     nombre,
@@ -112,7 +115,7 @@ class Cliente extends Model
             apellido='$this->apellido',
             dni='$this->dni',
             celular='$this->celular',
-            correo='$this->corre',
+            correo='$this->correo',
             clave='$this->clave'
             WHERE idcliente= ?"; 
         $affected = DB::update($sql, [$this->idcliente]);
@@ -157,6 +160,29 @@ class Cliente extends Model
         }
         return null;
     }
+    public function correoDuplicado($correo) {
+        $sql = "SELECT 
+                A.idcliente,
+                A.nombre,
+                A.apellido,
+                A.dni,
+                A.celular,
+                A.correo,
+                A.clave
+                FROM clientes A
+                WHERE A.correo = '$correo' ";
+        $lstRetorno = DB::select($sql);
+        if(count($lstRetorno)==0 
+        ||(count($lstRetorno)==1 && $lstRetorno[0]->idcliente==$this->idcliente)){
+            
+            return false;
+
+        }elseif(count($lstRetorno)>1
+        ||(count($lstRetorno)==1 && $lstRetorno[0]->idcliente!=$this->idcliente)){
+
+            return true;
+        }
+    }
     public function login($correo,$clave) {
         $sql = "SELECT
                 A.idcliente,
@@ -167,10 +193,10 @@ class Cliente extends Model
                 A.correo,
                 A.clave
                 FROM clientes A
-                WHERE A.correo = '$correo' AND A.clave='$clave'";
+                WHERE A.correo = '$correo'";
         $lstRetorno = DB::select($sql);
 
-        if(count($lstRetorno)>0){
+        if(count($lstRetorno)>0 &&($this->validarClave($clave,$lstRetorno[0]->clave))){
             $this->nombre=$lstRetorno[0]->idcliente;
             $this->nombre=$lstRetorno[0]->nombre;
             $this->apellido=$lstRetorno[0]->apellido;
@@ -216,7 +242,6 @@ class Cliente extends Model
         $affected = DB::delete($sql, [$this->idcliente]);
         
     }
+   
 
 }
-
-?>

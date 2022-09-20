@@ -18,9 +18,8 @@ class ControladorRegistracion extends Controller
     }
     public function guardarCliente(Request $request)
     {
-            $cliente=new Cliente();
-            $cliente->cargarDesdeRequest($request);
-            $cliente->insertar();
+            $controladorCliente=new ControladorCliente();
+            $controladorCliente->guardar($request);
             return redirect()->route('registracion.nuevoCliente');
     }
         

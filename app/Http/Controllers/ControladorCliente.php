@@ -19,8 +19,10 @@ class ControladorCliente extends Controller
 
         return view('cliente.cliente-nuevo', compact('titulo', 'cliente'));
     }
+    
     public function guardar(Request $request)
     {
+      
         try {
             //Define la entidad servicio
             $titulo = "Modificar cliente";
@@ -29,10 +31,14 @@ class ControladorCliente extends Controller
             $_POST["id"] = $entidad->idcliente;
 
             //validaciones
-            if ($entidad->nombre == "") {
+            if ($entidad->nombre == "" ) {
                 $msg["ESTADO"] = MSG_ERROR;
                 $msg["MSG"] = "Complete todos los datos";
-            } else {
+            } elseif($entidad->correoDuplicado($entidad->correo)){
+                $msg["ESTADO"] = MSG_ERROR;
+                $msg["MSG"] = "El correo ya fue registrado";
+            }
+            else {
 
                 if ($_POST["id"] > 0) {
                     //Es actualizacion
@@ -47,12 +53,13 @@ class ControladorCliente extends Controller
                     $msg["ESTADO"] = MSG_SUCCESS;
                     $msg["MSG"] = OKINSERT;
                 }
-
-                return view('cliente.cliente-listar', compact('titulo', 'msg'));
             }
+            return view('cliente.cliente-listar', compact('titulo', 'msg'));
         } catch (Exception $e) {
             $msg["ESTADO"] = MSG_ERROR;
-            $msg["MSG"] = ERRORINSERT;
+            $msg["MSG"] = ERRORINSERT ;
+            
+            
         }
 
         $id = $entidad->idcliente;
@@ -117,6 +124,7 @@ class ControladorCliente extends Controller
                 return view('sistema.pagina-error', compact('titulo', 'codigo', 'mensaje'));
             } else {
                 $cliente = new cliente();
+                
                 $cliente->obtenerPorId($id);
 
                 return view('cliente.cliente-nuevo', compact('cliente', 'titulo'));

@@ -32,6 +32,7 @@
 <?php
 
 if (isset($msg)) {
+  
     echo '<div id = "msg"></div>';
     echo '<script>msgShow("' . $msg["MSG"] . '", "' . $msg["ESTADO"] . '")</script>';
 }
@@ -74,7 +75,11 @@ if (isset($msg)) {
             </div>
             <div class="form-group col-lg-6">
                 <label>Clave: *</label>
+                @if($globalId > 0)
+                <input type="text" id="txtClave" name="txtClave" class="form-control" value="" required>
+                @else
                 <input type="text" id="txtClave" name="txtClave" class="form-control" value="{{$cliente->clave}}" required>
+                @endif
             </div>
         </div>
 
