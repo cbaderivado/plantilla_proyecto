@@ -31,7 +31,8 @@
   <div class="container">
     <div class="row">
       <div class="form-group col-lg-12">
-        <table id="grilla" class=" table text-white display">
+      @if(isset($aPedidos))  
+      <table id="grilla" class=" table text-white display">
           <thead>
             <tr>
               <th>Fecha</th>
@@ -44,6 +45,8 @@
             </tr>
           </thead>
           <tbody>
+            
+
             @foreach ($aPedidos as $item)
             <tr>
               <td>{{$item->fecha}}</td>
@@ -56,6 +59,9 @@
             @endforeach
           </tbody>
         </table>
+        @else
+        <p class="text-white">Sin pedidos registrados</p>
+        @endif  
       </div>
     </div>
   </div>
