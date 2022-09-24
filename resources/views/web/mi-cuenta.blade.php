@@ -1,6 +1,9 @@
 @extends('web.plantilla')
 @section('contenido')
-
+<?php 
+$paginaPrevia=isset($_SERVER['HTTP_REFERER'])?$_SERVER['HTTP_REFERER']:'';
+$paginaPrevia=$paginaPrevia=='http://127.0.0.1:8000/takeaway'?'/takeaway':'';
+?>
 <section class="book_section layout_padding">
   <div class="container">
     <div class="heading_container">
@@ -13,6 +16,7 @@
         <div class="form_container">
           <form id="form1" action="{{route('miCuenta.ingresar')}}" method="POST">
             <input type="hidden" name="_token" value="{{ csrf_token() }}"></input>
+            <input type="hidden"  id="paginaPrevia" name="paginaPrevia"value="{{$paginaPrevia}}" /></input>
             <div class="row">
               <div class="form-group col-lg-6">
                 <label class="about_section">Correo: *</label>

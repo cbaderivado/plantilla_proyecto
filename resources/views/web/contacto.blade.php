@@ -12,7 +12,7 @@
     <div class="row">
       <div class="col-md-6">
         <div class="form_container">
-          <form action="{{route('contacto.envar')}}" method="POST">
+          <form action="{{route('contacto.enviar')}}" method="POST">
             <div>
               <input type="text" id="txtNombre" name="txtNombre"class="form-control" placeholder="Nombre" />
             </div>

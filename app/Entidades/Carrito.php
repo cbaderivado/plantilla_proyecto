@@ -7,7 +7,7 @@ use DB;
 use Session;
 require app_path().'/start/constants.php';
 
-class Ciente extends Model
+class Carrito extends Model
 {
     protected $table = 'carritos';
     public $timestamps = false;
@@ -26,31 +26,7 @@ class Ciente extends Model
         $this->comentario =$request->input('txtComentarios');
     }
 
-    // public function obtenerFiltrado() {
-    //     $request = $_REQUEST;
-    //     $columns = array(
-    //         0 => 'A.idcarrito',
-    //         1 => 'A.fk_idproducto',
-    //         2 => 'A.fk_idcliente',
-    //         3 => 'A.comentario',
-    //     );
-    //     $sql = "SELECT 
-    //             A.idcarrito,
-    //             A.fk_idproducto,
-    //             A.fk_idcliente,
-    //             A.comentario
-    //             FROM carritos A
-    //             WHERE 1=1";
-    //     //Realiza el filtrado
-    //     if (!empty($request['search']['value'])) { 
-    //         $sql.=" AND ( A.nombre LIKE '%" . $request['search']['value'] . "%' ";
-    //     }
-    //     $sql.=" ORDER BY " . $columns[$request['order'][0]['column']] . "   " . $request['order'][0]['dir'];
-
-    //     $lstRetorno = DB::select($sql);
-
-    //     return $lstRetorno;
-   //}
+    
      public function insertar() {
             $sql = "INSERT INTO carritos (
                     fk_idproducto,
@@ -106,6 +82,15 @@ class Ciente extends Model
             return $lstRetorno[0];
         }
         return null;
+        
+    }
+    public function eliminar()
+    {
+        
+            $sql = "DELETE FROM carritos WHERE
+            idcarrito=?";
+            
+        DB::delete($sql, [$this->idcarrito]);
         
     }
 

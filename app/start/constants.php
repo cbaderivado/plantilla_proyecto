@@ -1,5 +1,5 @@
 <?php
-
+if (!isset($_SESSION)){session_start();}
 if (!defined('ID_NULO')) define("ID_NULO", "0");
 if (!defined('STRING_EMPTY')) define("STRING_EMPTY", "");
 if (!defined('EXIT_SUCCESS')) define("EXIT_SUCCESS", "0");

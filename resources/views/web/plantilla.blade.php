@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <?php
+use Illuminate\Support\Facades\Session;
 $activeInicio="";
 $activeTakeaway="";
 $activeNosotros="";
@@ -22,6 +23,8 @@ elseif ($_SERVER['REQUEST_URI']=='/mi-cuenta'){
   $activeMiCuenta="active";
   $ocultar="hidden";
 }
+$idcliente=session::get('idcliente')==NULL?'0':session::get('idcliente');
+//print_r($idcliente);exit;
  ?>
 <head>
   <!-- Basic -->
@@ -155,11 +158,13 @@ elseif ($_SERVER['REQUEST_URI']=='/mi-cuenta'){
                   <i class="fa fa-search" aria-hidden="true"></i>
                 </button>
               </form> -->
-                <a href="/mi-cuenta" class="order_online">
-                   Ingresar
-              </a>
-
-               
+                
+                @if($idcliente=='0')   
+                <a href="/mi-cuenta" class="order_online">Ingresar</a>
+                @else
+                <a href="{{route('miCuenta.salir')}}" class="order_online">Salir</a>
+                @endif
+ 
             </div>
           </div>
         </nav>
@@ -168,7 +173,7 @@ elseif ($_SERVER['REQUEST_URI']=='/mi-cuenta'){
     <!-- end header section -->
     @yield('contenido')
     <!-- footer section -->
-    <footer class="footer_section">
+    <footer class="footer_section mt-auto py-3">
       <div class="container">
         <div class="row">
           <div class="col-md-4 footer-col">

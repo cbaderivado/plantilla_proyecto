@@ -28,7 +28,7 @@
                     Pedir ahora al {{$item->telefono}}
                   </p>
                   <div class="btn-box">
-                    <a href="/carrito" class="btn1">
+                    <a href="/takeaway" class="btn1">
                       Pedir ahora
                     </a>
                   </div>
