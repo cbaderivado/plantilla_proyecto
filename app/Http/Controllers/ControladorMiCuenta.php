@@ -8,6 +8,7 @@ use App\Entidades\Pedido;
 use App\Entidades\Producto;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Session;
+use App\Http\Controllers\ControladorCliente;
 
 
 class ControladorMiCuenta extends Controller
@@ -96,7 +97,37 @@ class ControladorMiCuenta extends Controller
         }
 
     }
+    public function indexActualizarDatos(){
+        $cliente=new Cliente();
+        $cliente=$cliente->obtenerPorId(session::get('idcliente'));         
+        return view('web.actualizar-datos',compact('cliente'));
+    }
+    public function actualizarDatos(Request $request)
+    {
+        $cliente=new Cliente();
+        $cliente->cargarDesdeRequest($request);
+        
+        if ($cliente->nombre == "" ) {
+        
+            $msg["ESTADO"] = MSG_ERROR;
+            $msg["MSG"] = "Complete todos los datos";
+        } elseif($cliente->correoDuplicado($cliente->correo)){
+            
+            $msg["ESTADO"] = MSG_ERROR;
+            $msg["MSG"] = "El correo ya fue registrado";}
+        else{
+            $cliente->guardarDatos();
+            session::forget('idcliente');
+            return view ("web.datos-actualizados");
+            
+        }
+        return view ("web.actualizar-datos",compact('cliente', 'msg'));
+
+    }
+
     public function cambiarContraseña(){
         return view('web.cambiar-contraseña');
     }
 }
+
+

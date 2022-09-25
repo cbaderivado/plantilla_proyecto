@@ -25,7 +25,12 @@
         <input disabled type="text" id="txtCorreo" name="txtCorreo" class="form-control" value="{{$cliente->correo}}" required>
       </div>
       <div class="form-group col-lg-1 mr-3">
-        <a class="text-white btn btn-info pl-3 pr-3 mt-3" href="/cambiar-contraseña">Cambiar contraseña</a>
+        <div class="row">
+          <a class="text-white btn btn-info pl-3 pr-3 mt-3 fs-6 " href="/actualizar-datos">Act. datos</a>
+        </div>
+        <div class="row">
+          <a class="text-white btn btn-info pl-3 pr-3 mt-3  fs-6" href="/cambiar-contraseña">Act. password</a>
+        </div>
       </div>
   </div>
 </section>

@@ -120,6 +120,16 @@ class Cliente extends Model
             WHERE idcliente= ?"; 
         $affected = DB::update($sql, [$this->idcliente]);
     }
+    public function guardarDatos() {
+        $sql = "UPDATE clientes SET
+             nombre='$this->nombre',
+             apellido='$this->apellido',
+             dni='$this->dni',
+             celular='$this->celular',
+             correo='$this->correo'
+             WHERE idcliente= ?"; 
+         $affected = DB::update($sql, [$this->idcliente]);
+     }
 
     public function obtenerTodos() {
         $sql = "SELECT 
@@ -172,6 +182,7 @@ class Cliente extends Model
                 FROM clientes A
                 WHERE A.correo = '$correo' ";
         $lstRetorno = DB::select($sql);
+        
         if(count($lstRetorno)==0 
         ||(count($lstRetorno)==1 && $lstRetorno[0]->idcliente==$this->idcliente)){
             
@@ -212,6 +223,7 @@ class Cliente extends Model
   
     public function obtenerPorId($idCliente){
         $sql = "SELECT
+                A.idcliente,
                 A.nombre,
                 A.apellido,
                 A.dni,

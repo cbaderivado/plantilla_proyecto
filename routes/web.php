@@ -49,13 +49,21 @@ Route::post('/recuperar', 'ControladorRecuperar@recuperar')->name('recuperar.rec
 Route::get('/nuevoCliente', 'ControladorRegistracion@nuevoCliente')->name('registracion.nuevoCliente');
 Route::get('/cambiar-contraseña', 'ControladorMicuenta@cambiarContraseña');
 Route::post('/cambiar-contraseña', 'ControladorMicuenta@actualizarClave')->name('miCuenta.actualizarClave');
+Route::get('/actualizar-datos', 'ControladorMicuenta@indexActualizarDatos');
+Route::post('/actualizar-datos', 'ControladorMicuenta@actualizarDatos')->name('miCuenta.actualizarDatos');
 
 
 /* --------------------------------------------- */
 /* CONTROLADOR DE TAKEAWAY                       */
 /* --------------------------------------------- */
 Route::get('/takeaway', 'ControladorTakeaway@index');
-Route::post('/takeaway', 'ControladorTakeaway@llenarCarrito')->name('takeaway.llenarCarrito');
+Route::post('/carrito', 'ControladorCarrito@index');
+
+/* --------------------------------------------- */
+/* CONTROLADOR DE CARRITO                       */
+/* --------------------------------------------- */
+Route::post('/carrito', 'ControladorCarrito@index')->name('carrito.cargarCarrito');
+Route::get('/carrito', 'ControladorCarrito@index');
 
 
 /* --------------------------------------------- */
@@ -209,6 +217,7 @@ Route::post('/admin/categoria/nuevo/{id}', 'ControladorCategoria@guardar');
 
 
 });
+
 
 
 

@@ -38,7 +38,7 @@ $globalId = isset($carrito) & isset($carrito->idcarrito) ? $carrito->idcarrito :
                   <h6>
                     ${{$item->precio}}
                   </h6>
-                  <form class="m-1" id="form1" action="{{route('takeaway.llenarCarrito')}}" method="POST">
+                  <form class="m-1" id="form1" action="{{route('carrito.cargarCarrito')}}" method="POST">
                     <input type="hidden" name="_token" value="{{ csrf_token() }}"></input>
                     <input type="hidden" name="id" id="id" value="{{$globalId}}"></input>
                     <label for="txtCantidad">Cantidad:</label>

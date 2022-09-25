@@ -6,7 +6,7 @@
   <div class="container">
     <div class="heading_container mb-5">
       <h2>
-        Escriba su contraseña actual y la nueva:
+        Ingrese los datos a actualizar:
       </h2>
     </div>
     @if(isset($msg))
@@ -31,21 +31,37 @@
     <div class="row mt-5">
       <div class="col-md-6">
         <div class="form_container">
-          <form id="form1" action="{{route('miCuenta.actualizarClave')}}" method="POST">
+          <form id="form1" action="{{route('miCuenta.actualizarDatos')}}" method="POST">
             <div class="row">
               <input type="hidden" name="_token" value="{{ csrf_token() }}"></input>
+              <input type="hidden" id="id" name="id" class="form-control" value="{{$cliente->idcliente}}" required>
               <div class="form-group col-lg-6">
-                <label>Contraseña actual: *</label>
-                <input type="password" id="txtClaveActual" name="txtClaveActual" class="form-control" value="" required>
+                <label>Nombre: *</label>
+                <input type="text" id="txtNombre" name="txtNombre" class="form-control" value="{{$cliente->nombre}}" required>
+              </div>
+              <div class="form-group col-lg-6">
+                <label>Apellido: *</label>
+                <input type="text" id="txtApellido" name="txtApellido" class="form-control" value="{{$cliente->apellido}}" required>
               </div>
             </div>
             <div class="row">
               <div class="form-group col-lg-6">
-                <label>Clave: *</label>
-                <input type="password" id="txtClaveNueva" name="txtClaveNueva" class="form-control" value="" required>
+                <label>Documento: *</label>
+                <input type="text" id="txtDni" name="txtDni" class="form-control" value="{{$cliente->dni}}" required>
+              </div>
+              <div class="form-group col-lg-6">
+                <label>Celular: *</label>
+                <input type="text" id="txtCelular" name="txtCelular" class="form-control" value="{{$cliente->celular}}" required>
               </div>
             </div>
+            <div class="row">
 
+              <div class="form-group col-lg-6">
+                <label>Correo: *</label>
+                <input type="text" id="txtCorreo" name="txtCorreo" class="form-control" value="{{$cliente->correo}}" required>
+              </div>
+              
+            </div>
             <div class="form-group col-lg-4">
               <button class="text-white btn btn-info" type="summit">
                 Actualizar
