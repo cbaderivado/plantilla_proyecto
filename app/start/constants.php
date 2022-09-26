@@ -1,5 +1,5 @@
 <?php
-if (!isset($_SESSION)){session_start();}
+
 if (!defined('ID_NULO')) define("ID_NULO", "0");
 if (!defined('STRING_EMPTY')) define("STRING_EMPTY", "");
 if (!defined('EXIT_SUCCESS')) define("EXIT_SUCCESS", "0");
@@ -35,5 +35,6 @@ if (!defined('USUARIOINCORRECTO')) define("USUARIOINCORRECTO", "El usuario no es
 
 //Web Carrito
 if (!defined('OKPEDIDO')) define("OKPEDIDO", "¡Pedido enviado!");
-
+if (!defined('EN_PREPARACION')) define("EN_PREPARACION", "2");
+if (!defined('PENDIENTE')) define("PENDIENTE", "3");
 ?>

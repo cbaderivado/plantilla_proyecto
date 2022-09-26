@@ -42,8 +42,8 @@ class ControladorMiCuenta extends Controller
                         $msg["ESTADO"] = MSG_ERROR;
                         $msg["MSG"] = "Credenciales incorrectas";
                         return view("web.mi-cuenta", compact('titulo', 'msg'));
-                    
-        }elseif($request->input('paginaPrevia')=='/takeaway'){
+                        
+        }elseif($request->input('paginaPrevia')=='/takeaway' || $request->input('paginaPrevia')=='/carrito'){
             session::put('idcliente',$cliente->idcliente);
             $producto=new Producto();
             $aProductos=$producto->obtenerTodos();

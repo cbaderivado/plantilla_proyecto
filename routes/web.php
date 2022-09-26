@@ -62,8 +62,10 @@ Route::post('/carrito', 'ControladorCarrito@index');
 /* --------------------------------------------- */
 /* CONTROLADOR DE CARRITO                       */
 /* --------------------------------------------- */
-Route::post('/carrito', 'ControladorCarrito@index')->name('carrito.cargarCarrito');
 Route::get('/carrito', 'ControladorCarrito@index');
+Route::post('/cancelado', 'ControladorCarrito@cancelarPedido')->name('carrito.cancelarPedido');
+Route::post('/guardado', 'ControladorCarrito@guardarPedido')->name('carrito.guardarPedido');
+Route::post('/carrito', 'ControladorCarrito@index')->name('carrito.cargarCarrito');
 
 
 /* --------------------------------------------- */

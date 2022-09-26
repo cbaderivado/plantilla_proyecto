@@ -16,7 +16,8 @@ class Carrito extends Model
                             'idcarrito',
                             'fk_idproducto',
                             'fk_idcliente',
-                            'comentario'
+                            'comentario',
+                            'cantidad'
                             ];
     
     function cargarDesdeRequest($request) {
@@ -24,6 +25,8 @@ class Carrito extends Model
         $this->fk_idproducto =$request->input('txtProducto');
         $this->fk_idcliente =$request->input('txtCliente');
         $this->comentario =$request->input('txtComentarios');
+        $this->cantidad =$request->input('txtCantidad');
+
     }
 
     
@@ -31,12 +34,15 @@ class Carrito extends Model
             $sql = "INSERT INTO carritos (
                     fk_idproducto,
                     fk_idcliente,
-                    comentario
-                    ) VALUES (?,?,?);";
+                    comentario,
+                    cantidad
+                    ) VALUES (?,?,?,?);";
             $result = DB::insert($sql, [
             		$this->fk_idproducto,
                     $this->fk_idcliente,
-                    $this->comentario
+                    $this->comentario,
+                    $this->cantidad
+
                     ]);
 
             return $this->idcarrito = DB::getPdo()->lastInsertId();
@@ -56,8 +62,9 @@ class Carrito extends Model
                 A.idcarrito,
                 A.fk_idproducto,
                 A.fk_idcliente,
-                A.comentario
-                FROM carrito A";
+                A.comentario,
+                A.cantidad
+                FROM carritos A";
 
         $sql .= " ORDER BY A.idcarrito";
         $lstRetorno = DB::select($sql);
@@ -66,19 +73,24 @@ class Carrito extends Model
 
 
     public function obtenerPorIdCarrito($idCarrito){
+       
         $sql = "SELECT
                 A.idcarrito,
                 A.fk_idproducto,
                 A.fk_idcliente,
-                A.comentario
-                FROM carrito A
+                A.comentario,
+                A.cantidad
+                FROM carritos A
                 WHERE A.idcarrito = '$idCarrito'";
             $lstRetorno = DB::select($sql);
+
            if(count($lstRetorno)>0){
             $this->idcarrito=$lstRetorno[0]->idcarrito;
             $this->fk_idproducto=$lstRetorno[0]->fk_idproducto;
             $this->fk_idcliente=$lstRetorno[0]->fk_idcliente;
             $this->comentario=$lstRetorno[0]->comentario;
+            $this->cantidad=$lstRetorno[0]->cantidad;
+            
             return $lstRetorno[0];
         }
         return null;

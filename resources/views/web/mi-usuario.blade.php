@@ -4,32 +4,32 @@
 <section class="about_section">
   <div class="container">
     <div class="row">
-      <div class="form-group col-lg-2 mr-3">
+      <div class="form-group col-lg-2">
         <label>Nombre:</label>
         <input disabled type="text" id="txtNombre" name="txtNombre" class="form-control" value="{{$cliente->nombre}}" required>
       </div>
-      <div class="form-group col-lg-2 mr-3">
+      <div class="form-group col-lg-2">
         <label>Apellido:</label>
         <input disabled type="text" id="txtApellido" name="txtApellido" class="form-control" value="{{$cliente->apellido}}" required>
       </div>
-      <div class="form-group col-lg-2 mr-3">
+      <div class="form-group col-lg-2">
         <label>Documento:</label>
         <input disabled type="text" id="txtDni" name="txtDni" class="form-control" value="{{$cliente->dni}}" required>
       </div>
-      <div class="form-group col-lg-2 mr-3">
+      <div class="form-group col-lg-2">
         <label>Celular:</label>
         <input disabled type="text" id="txtCelular" name="txtCelular" class="form-control" value="{{$cliente->celular}}" required>
       </div>
-      <div class="form-group col-lg-2 mr-3">
+      <div class="form-group col-lg-2">
         <label>Correo:</label>
         <input disabled type="text" id="txtCorreo" name="txtCorreo" class="form-control" value="{{$cliente->correo}}" required>
       </div>
-      <div class="form-group col-lg-1 mr-3">
+      <div class="form-group col-lg-2">
         <div class="row">
-          <a class="text-white btn btn-info pl-3 pr-3 mt-3 fs-6 " href="/actualizar-datos">Act. datos</a>
+          <a class="text-white btn btn-info pl-3 pr-3 mt-3 fs-6 " href="/actualizar-datos">Actualizar datos</a>
         </div>
         <div class="row">
-          <a class="text-white btn btn-info pl-3 pr-3 mt-3  fs-6" href="/cambiar-contraseña">Act. password</a>
+          <a class="text-white btn btn-info pl-3 pr-3 mt-3  fs-6" href="/cambiar-contraseña">Cambiar contraseña</a>
         </div>
       </div>
   </div>

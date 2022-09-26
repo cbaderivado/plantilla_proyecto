@@ -3,7 +3,7 @@
 <!-- food section -->
 <?php
 $idCliente=Session::get('idcliente')==NULL?'0':Session::get('idcliente');
-//print_r($idCliente); exit;
+if(session::get('idcarrito')!=NULL){session::forget('idcarrito');}
 $globalId = isset($carrito) & isset($carrito->idcarrito) ? $carrito->idcarrito : "0";
 ?>
 <section class="food_section layout_padding-bottom  mb-5 pb-5">

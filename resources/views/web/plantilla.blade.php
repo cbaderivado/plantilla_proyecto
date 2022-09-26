@@ -101,6 +101,7 @@ $idcliente=session::get('idcliente')==NULL?'0':session::get('idcliente');
               <!-- <a href="" class="user_link">
                 <i class="fa fa-user" aria-hidden="true"></i>
               </a> -->
+              @if(session::get('idcarrito')!=NULL)
               @if($activeCarrito!='')
               <a class="cart_link" href="/carrito">
                 <svg style="fill:rgb(255 190 51)" version="1.1" id="Capa_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" x="0px" y="0px" viewBox="0 0 456.029 456.029" style="enable-background:new 0 0 456.029 456.029;" xml:space="preserve">
@@ -211,6 +212,7 @@ $idcliente=session::get('idcliente')==NULL?'0':session::get('idcliente');
                   </g>
                 </svg>
               </a>
+              @endif
               @endif
                 @if($idcliente=='0')   
                 <a href="/mi-cuenta" class="order_online">Ingresar</a>
