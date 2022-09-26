@@ -45,10 +45,11 @@ class ControladorCarrito extends Controller
         else{ return view('web.mi-cuenta');}
     }
     public function guardarPedido(Request $request)
-    {   
+    {
+        //te debo usar la API de Mercado pago   
         $carrito=new Carrito();
         $carrito=$carrito->obtenerPorIdCarrito($request->input('id'));
-     //   print_r($request->input('id'));exit;
+     
         $producto=new Producto();
         $producto=$producto->obtenerPorId($carrito->fk_idproducto);
         $cliente=new Cliente();
